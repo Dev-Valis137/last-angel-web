@@ -8,8 +8,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
 </head>
 <body>
+
+<div id="react-root" style="position:fixed;inset:0;z-index:-1;pointer-events:none"></div>
 
 <!-- ===== NAV ===== -->
 <nav>
@@ -369,6 +374,11 @@
 </footer>
 
 <script src="script.js"></script>
+<script type="text/babel" src="GravityStarsBackground.jsx"></script>
+<script type="text/babel">
+const root = ReactDOM.createRoot(document.getElementById('react-root'));
+root.render(<GravityStarsBackground />);
+</script>
 
 </body>
 </html>
