@@ -17,6 +17,7 @@
   --ease-spring: cubic-bezier(0.2, 0.9, 0.4, 1);
 }
 html { scroll-behavior: smooth; }
+html:not(.touch) * { cursor: none !important; }
 
 /* Light mode overrides */
 html.light {
