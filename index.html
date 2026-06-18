@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LAST ANGEL · ARKHAM — Sistema de Juego</title>
+  <script>
+    (function() {
+      var t = localStorage.getItem('valis-theme') || 'dark';
+      if (t === 'system') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.className = t;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/last-angel-web/assets/index-gRWBLZH6.js"></script>
+  <link rel="stylesheet" crossorigin href="/last-angel-web/assets/index-BQoF965J.css">
+</head>
+<body>
+
+<div id="react-root" style="position:fixed;inset:0;z-index:-1;pointer-events:none"></div>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <span class="nav-logo">🕶️ VALIS/137</span>
+  <input type="checkbox" id="nav-toggle" autocomplete="off">
+  <label for="nav-toggle" class="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </label>
+  <ul class="nav-links">
+    <li><a href="#economia">Economía</a></li>
+    <li><a href="#atributos">Atributos</a></li>
+    <li><a href="#perks">Perks</a></li>
+    <li><a href="#resolucion">Resolución</a></li>
+    <li><a href="#juicios">Legal</a></li>
+    <li><a href="#combate">Combate</a></li>
+    <li><a href="#fichas">Fichas</a></li>
+    <li><a href="#web">Web</a></li>
+  </ul>
+  <div id="theme-toggle-target"></div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <h1>LAST ANGEL · ARKHAM</h1>
+  <p>La noche tiene muchos nombres. Bienvenido a Arkham. Sistema de juego para el servidor de rol <strong>LAST ANGEL</strong> — reglas, economía, combate, perks y progresión.</p>
+  <div class="scroll-indicator">▼ Desplázate ▼</div>
+</section>
+
+<!-- ===== 1. ECONOMÍA ===== -->
+<section id="economia">
+  <h2>Economía y Supervivencia</h2>
+  <p class="section-subtitle">Créditos, gastos, licencias y mercado negro en las calles de Arkham.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>💼 Ingresos</h3>
+      <ul>
+        <li><strong>Trabajo legal</strong> — 200–1000 créd/semana</li>
+        <li><strong>Trabajo ilegal</strong> — 300–3000 créd/semana</li>
+        <li><strong>Comercio / trueque</strong> — Variable</li>
+        <li><strong>Juegos de azar</strong> — Variable</li>
+        <li><strong>Hackeo / fraude</strong> — Variable</li>
+        <li><strong>Protección</strong> — 200–1000 créd/semana</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>📉 Gastos Pasivos <span class="sub">(c/15 días)</span></h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Concepto</th><th>Coste</th><th>Consecuencia</th></tr></thead>
+          <tbody>
+            <tr><td>Alquiler zona baja</td><td>400–800</td><td>Desalojo 48h</td></tr>
+            <tr><td>Alquiler zona media</td><td>800–2000</td><td>Desalojo + demanda</td></tr>
+            <tr><td>Alquiler zona alta</td><td>2000–6000</td><td>Embargo</td></tr>
+            <tr><td>Comida básica</td><td>300</td><td>Hambre</td></tr>
+            <tr><td>Comida normal</td><td>600–1000</td><td>—</td></tr>
+            <tr><td>Seguro público</td><td>200</td><td>Sin hospital</td></tr>
+            <tr><td>Seguro privado</td><td>800–2000</td><td>Atención élite</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>📜 Licencias</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tipo</th><th>Coste</th><th>Requisitos</th><th>Sin licencia</th></tr></thead>
+          <tbody>
+            <tr><td>Porte de arma</td><td>500</td><td>Examen + 3 meses</td><td>Multa 2000 o 1 año prisión</td></tr>
+            <tr><td>Conducción comercial</td><td>300</td><td>Curso 40h</td><td>Multa 1000 + inmovilización</td></tr>
+            <tr><td>Negocio</td><td>1000</td><td>Registro + inspección</td><td>Clausura + multa 5000</td></tr>
+            <tr><td>Clínica privada</td><td>5000</td><td>Acreditación + seguro</td><td>Prisión 2–5 años</td></tr>
+            <tr><td>Taxi</td><td>800</td><td>Antecedentes + ruta</td><td>Multa 1500 + retirada</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🖤 Mercado Negro</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Artículo</th><th>Precio (créd)</th></tr></thead>
+          <tbody>
+            <tr><td>Pistola sin serial</td><td>800</td></tr>
+            <tr><td>Fusil</td><td>3000</td></tr>
+            <tr><td>Documentos falsos</td><td>1000–5000</td></tr>
+            <tr><td>Medicamentos</td><td>50–200</td></tr>
+            <tr><td>Datos bancarios</td><td>2000–10000</td></tr>
+            <tr><td>Chip de rastreo</td><td>500</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. ATRIBUTOS ===== -->
+<section id="atributos">
+  <h2>Atributos y Progresión</h2>
+  <p class="section-subtitle">Siete atributos en escala 1–100. 150 puntos iniciales, cap 50, límite global 555.</p>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <h3>📊 Los 7 Atributos</h3>
+    <div class="stat-grid">
+      <div class="stat-item">
+        <div class="stat-label"><span>💪 Físico</span><span>1–100</span></div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:35%"></div></div>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Fuerza, daño cuerpo a cuerpo, resistencia</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label"><span>🏃 Agilidad</span><span>1–100</span></div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:35%"></div></div>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Velocidad, reflejos, sigilo, puntería</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label"><span>🧠 Intelecto</span><span>1–100</span></div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:35%"></div></div>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Ciencia, hacking, medicina</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label"><span>🗣️ Carisma</span><span>1–100</span></div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:35%"></div></div>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Influencia, persuasión, liderazgo</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label"><span>👁️ Percepción</span><span>1–100</span></div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:35%"></div></div>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Observación, puntería francotirador</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label"><span>🔮 Intuición</span><span>1–100</span></div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:35%"></div></div>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Sentido común, detectar mentiras</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label"><span>🧊 Temple</span><span>1–100</span></div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:35%"></div></div>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Calma, resistencia a tortura</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>📈 Escala de Poder</h3>
+      <div class="scale-list">
+        <div class="scale-item"><div class="range">1–10</div><div class="label">Deficiente</div></div>
+        <div class="scale-item"><div class="range">11–25</div><div class="label">Promedio</div></div>
+        <div class="scale-item"><div class="range">26–40</div><div class="label">Competente</div></div>
+        <div class="scale-item"><div class="range">41–50</div><div class="label">Élite</div></div>
+        <div class="scale-item"><div class="range">51–75</div><div class="label">Sobrehumano</div></div>
+        <div class="scale-item"><div class="range">76–100</div><div class="label">Pico humano</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⚙️ Creación y Progresión</h3>
+      <ul>
+        <li><strong>Creación:</strong> 150 puntos iniciales, mínimo 1 por atributo, cap inicial <span class="highlight">50</span>, límite global <span class="highlight">555</span></li>
+        <li><strong>PD base:</strong> <span class="highlight">5 PD/semana</span></li>
+        <li><strong>PD por escenas:</strong> 1–10 PD según participación</li>
+        <li><strong>PD por hitos:</strong> 20–50 PD por arcos argumentales</li>
+        <li><strong>Subir atributo:</strong> valor actual × 2 PD</li>
+        <li><strong>Perk nuevo:</strong> <span class="highlight">20 PD</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. PERKS ===== -->
+<section id="perks">
+  <h2>Sistema de Perks</h2>
+  <p class="section-subtitle">Cuatro ramas con requisitos mínimos de atributo. Perks personalizados disponibles con aprobación del staff.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🧠 Rama Mental <span class="sub">— Intelecto 30+</span></h3>
+      <ul>
+        <li><strong>Caja de chatarra</strong> — Usar Intelecto para crear gadgets improvisados</li>
+        <li><strong>Cirujano de datos</strong> — Hackeos mucho más difíciles de rastrear</li>
+        <li><strong>Médico de campo</strong> — Curar heridas graves sin necesidad de hospital</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🗣️ Rama Social <span class="sub">— Carisma 30+</span></h3>
+      <ul>
+        <li><strong>Tío Sam</strong> — 500 créd extra/semana (con riesgo)</li>
+        <li><strong>Zorro de la ley</strong> — Evitar arrestos 1 vez al mes</li>
+        <li><strong>Cara de póker</strong> — Nadie puede detectar tus mentiras</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>💪 Rama Física <span class="sub">— Físico/Agilidad 30+</span></h3>
+      <ul>
+        <li><strong>Reflejos de combate</strong> — Actuar primero en iniciativa</li>
+        <li><strong>Puño de hierro</strong> — +10 de daño cuerpo a cuerpo</li>
+        <li><strong>Puntería quirúrgica</strong> — Ignorar penalizaciones al disparar</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🔮 Rama Instinto <span class="sub">— Intuición/Temple 30+</span></h3>
+      <ul>
+        <li><strong>Ojo de halcón</strong> — Detectar emboscadas automáticamente</li>
+        <li><strong>Corazón de hielo</strong> — Inmune a intimidación</li>
+        <li><strong>Fantasma</strong> — +10 en sigilo</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.25rem;border-color:var(--accent-secondary)">
+    <p style="text-align:center;color:var(--text-secondary)">⚡ <strong style="color:var(--accent-secondary)">Perks personalizados</strong> permitidos con aprobación del staff. Máximo <strong>2 perks</strong> iniciales + <strong>20 PD extra</strong> para perks al crear personaje.</p>
+  </div>
+</section>
+
+<!-- ===== 4. RESOLUCIÓN ===== -->
+<section id="resolucion">
+  <h2>Resolución de Acciones</h2>
+  <p class="section-subtitle">Sistema híbrido: narrativa con apoyo de dados en momentos de tensión.</p>
+
+  <div class="formula-box">
+    <div class="formula">Atributo + 1d100</div>
+    <div class="formula-desc">Compara contra la dificultad establecida por el master / narrador.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🎯 Dificultades</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Dificultad</th><th>CD</th></tr></thead>
+          <tbody>
+            <tr><td>Fácil</td><td>40</td></tr>
+            <tr><td>Normal</td><td>70</td></tr>
+            <tr><td>Difícil</td><td>100</td></tr>
+            <tr><td>Extrema</td><td>140</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⚔️ PvP</h3>
+      <p>Enfrentamiento directo: el resultado <strong>más alto</strong> gana. Ambos tiran <em>Atributo + 1d100</em>.</p>
+      <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-secondary)">📌 Los dados solo se usan en <strong>momentos de tensión</strong> donde el resultado sea incierto. El resto es narrativo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. JUICIOS ===== -->
+<section id="juicios">
+  <h2>Juicios y Sistema Legal</h2>
+  <p class="section-subtitle">Proceso judicial completo en 6 pasos. La ley de Arkham es implacable.</p>
+
+  <div class="steps">
+    <div class="step"><h4>Apertura del caso</h4><p>El fiscal presenta los cargos formalmente.</p></div>
+    <div class="step"><h4>Defensa</h4><p>El abogado presenta la versión del acusado.</p></div>
+    <div class="step"><h4>Testigos</h4><p>Declaraciones y contrainterrogatorio.</p></div>
+    <div class="step"><h4>Veredicto</h4><p>El juez decide: absolución, multa, trabajos, prisión, cadena perpetua o ejecución <strong>(solo con consenso)</strong>.</p></div>
+    <div class="step"><h4>Apelación</h4><p>Una única apelación con un juez diferente.</p></div>
+    <div class="step"><h4>Prisiones</h4><p>Rol de Encarcelado. Libertad condicional tras cumplir la mitad de la condena.</p></div>
+  </div>
+</section>
+
+<!-- ===== 6. COMBATE ===== -->
+<section id="combate">
+  <h2>Combate</h2>
+  <p class="section-subtitle">Sistema principalmente narrativo. Los dados solo entran en tensión extrema.</p>
+
+  <div class="grid-3" style="margin-bottom:1.25rem">
+    <div class="card">
+      <h3>🗡️ Iniciativa</h3>
+      <p><strong>Agilidad + 1d100</strong>. El orden de mayor a menor resultado determina los turnos.</p>
+    </div>
+    <div class="card">
+      <h3>🎯 Ataque</h3>
+      <p><strong>Agilidad o Físico + 1d100</strong> vs CD 70. Superar la CD es acertar.</p>
+    </div>
+    <div class="card">
+      <h3>🛡️ Defensa</h3>
+      <p><strong>Esquivar:</strong> Agilidad + 1d100. <strong>Bloquear:</strong> Físico + 1d100. Debe superar el ataque.</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>💥 Daño</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tipo</th><th>Fórmula</th></tr></thead>
+          <tbody>
+            <tr><td>Cuerpo a cuerpo</td><td>Físico ÷ 10 + modificador</td></tr>
+            <tr><td>Arma de fuego</td><td>Agilidad ÷ 10 + modificador</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>❤️ Puntos de Vida</h3>
+      <p><strong>PV = 50 + (Físico × 2)</strong></p>
+      <p style="margin-top:0.5rem">0 PV = <span class="highlight-purple">inconsciente</span>. La muerte solo ocurre con <strong>consenso</strong> de todas las partes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. FICHAS ===== -->
+<section id="fichas">
+  <h2>Fichas de Personaje</h2>
+  <p class="section-subtitle">Creación, aprobación y gestión de tu personaje en LAST ANGEL.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>📝 Creación</h3>
+      <p>Abre un ticket en el canal <strong>#solicitar-ficha</strong> con:</p>
+      <ul>
+        <li>Nombre, edad, profesión</li>
+        <li>Trasfondo <strong>(500 palabras)</strong></li>
+        <li><span class="highlight">150 puntos</span> en atributos (cap <span class="highlight">50</span>)</li>
+        <li>Máx. <strong>2 perks</strong> iniciales + <span class="highlight">20 PD extra</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>✅ Aprobación y Hilo</h3>
+      <ul>
+        <li>Un miembro del <strong>staff</strong> revisa y aprueba la ficha</li>
+        <li>Se abre un hilo en <strong>#fichas-aprobadas</strong></li>
+        <li>Las actualizaciones se solicitan mediante <strong>nuevo ticket</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. WEB ===== -->
+<section id="web">
+  <h2>Web de Fichas</h2>
+  <p class="section-subtitle">Plataforma externa para gestión de personajes — próximamente.</p>
+
+  <div class="coming-soon">
+    <div class="icon">🚧</div>
+    <h3>En desarrollo</h3>
+    <p>Estamos construyendo una plataforma web con <strong>GitHub Pages</strong> y <strong>Formspree</strong> para que puedas crear, enviar y recibir notificaciones sobre tu ficha de personaje directamente desde el navegador.</p>
+    <p style="margin-top:1rem;color:var(--accent)">📢 El lanzamiento se anunciará en <strong>#anuncios</strong>.</p>
+    <p style="margin-top:0.5rem;font-size:0.82rem;color:var(--text-secondary)">Formulario de envío • Notificaciones • Integración con Discord</p>
+  </div>
+</section>
+
+<footer>
+  <p>LAST ANGEL · ARKHAM — Sistema de juego v2.0. Hecho con 🖤 por VALIS/137.</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
