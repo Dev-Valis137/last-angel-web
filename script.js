@@ -23,3 +23,20 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     document.getElementById('nav-toggle').checked = false;
   });
 });
+
+// Card spotlight effect
+document.querySelectorAll('.card').forEach(card => {
+  const glow = document.createElement('div');
+  glow.className = 'card-spotlight';
+  card.appendChild(glow);
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    glow.style.opacity = '1';
+    glow.style.background = `radial-gradient(600px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(0,255,255,0.06), transparent 40%)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    glow.style.opacity = '0';
+  });
+});
