@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 
 export default function GravityStarsBackground() {
   const canvasRef = useRef(null)
@@ -75,13 +75,15 @@ export default function GravityStarsBackground() {
     }
   }, [])
 
-  return React.createElement('canvas', {
-    ref: canvasRef,
-    style: {
-      width: '100%',
-      height: '100%',
-      display: 'block',
-      pointerEvents: 'none',
-    },
-  })
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'block',
+        pointerEvents: 'none',
+      }}
+    />
+  )
 }
