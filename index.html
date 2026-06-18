@@ -374,78 +374,75 @@
 </footer>
 
 <script type="text/babel">
-const { useState, useRef, useEffect } = React;
+const { useState, useRef } = React;
 
-const FACES = [
-  { title: "Corporación Neon", img: "https://images.stockcake.com/public/9/2/a/92a28bcb-3e2e-438a-9e7f-57f49a63eec0/neon-nightclub-entrance-stockcake.jpg", x: 120, y: 40, rot: -6 },
-  { title: "Hijos del Pantano", img: "https://images.stockcake.com/public/1/d/a/1dad35d7-69e5-4e10-bbe1-48964c8b240b/urban-night-gathering-stockcake.jpg", x: 250, y: 100, rot: 4 },
-  { title: "Máquina de Guerra", img: "https://images.stockcake.com/public/6/9/0/690e67c4-a2ce-4222-bb74-0cbc5b74e0e2/cyberpunk-industrial-core-stockcake.jpg", x: 80, y: 180, rot: -8 },
-  { title: "Los Olvidados", img: "https://images.stockcake.com/public/6/f/d/6fdcca3f-02fd-457f-ae0b-0654bc7a877d/city-night-gathering-stockcake.jpg", x: 300, y: 220, rot: 3 },
-  { title: "Sindicato Kestrel", img: "https://images.stockcake.com/public/0/4/b/04bf5dec-771c-4f5e-a7e3-9f9118f10321/shadowy-boardroom-meeting-stockcake.jpg", x: 200, y: 300, rot: -4 },
-];
+function CardSpotlightDemo() {
+  const ref = useRef(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [visible, setVisible] = useState(false);
 
-function DraggableCardDemo() {
-  const [cards, setCards] = useState(FACES.map(f => ({ ...f, zIndex: 1 })));
-  const dragging = useRef(null);
-  const offset = useRef({ x: 0, y: 0 });
-
-  const onDown = (e, card) => {
-    dragging.current = card.title;
-    offset.current = { x: e.clientX - card.x, y: e.clientY - card.y };
-    setCards(prev => {
-      const maxZ = Math.max(...prev.map(c => c.zIndex));
-      return prev.map(c => c.title === card.title ? { ...c, zIndex: maxZ + 1 } : c);
-    });
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
+  const handleMouseMove = (e) => {
+    const rect = ref.current.getBoundingClientRect();
+    setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
-
-  const onMove = (e) => {
-    if (!dragging.current) return;
-    setCards(prev => prev.map(c =>
-      c.title === dragging.current
-        ? { ...c, x: e.clientX - offset.current.x, y: e.clientY - offset.current.y }
-        : c
-    ));
-  };
-
-  const onUp = () => {
-    dragging.current = null;
-    document.removeEventListener('mousemove', onMove);
-    document.removeEventListener('mouseup', onUp);
-  };
-
-  useEffect(() => () => { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); }, []);
 
   return (
     <section id="componentes">
       <h2>Componentes Interactivos</h2>
-      <p class="section-subtitle">Arrastra las tarjetas de las facciones de Arkham.</p>
-      <div class="draggable-stage">
-        <p class="draggable-watermark">LAS FACCIONES DE ARKHAM</p>
-        {cards.map(card => (
+      <p class="section-subtitle">Demo de componente con efecto spotlight.</p>
+      <div class="spotlight-wrapper">
+        <div
+          ref={ref}
+          class="spotlight-card"
+          onMouseMove={handleMouseMove}
+          onMouseEnter={() => setVisible(true)}
+          onMouseLeave={() => setVisible(false)}
+        >
           <div
-            key={card.title}
-            class="draggable-card"
-            onMouseDown={e => onDown(e, card)}
+            class="spotlight-glow"
             style={{
-              left: card.x + 'px',
-              top: card.y + 'px',
-              zIndex: card.zIndex,
-              transform: `rotate(${card.rot}deg)`,
+              opacity: visible ? 1 : 0,
+              background: `radial-gradient(600px circle at ${pos.x}px ${pos.y}px, rgba(0,255,255,0.06), transparent 40%)`,
             }}
-          >
-            <img src={card.img} alt={card.title} draggable="false" />
-            <h3>{card.title}</h3>
+          />
+          <div class="spotlight-content">
+            <p class="spotlight-title">Authentication steps</p>
+            <div class="spotlight-text">
+              Follow these steps to secure your account:
+              <ul class="spotlight-list">
+                <Step title="Enter your email address" />
+                <Step title="Create a strong password" />
+                <Step title="Set up two-factor authentication" />
+                <Step title="Verify your identity" />
+              </ul>
+            </div>
+            <p class="spotlight-note">
+              Ensuring your account is properly secured helps protect your personal
+              information and data.
+            </p>
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
 }
 
+const Step = ({ title }) => (
+  <li class="spotlight-step">
+    <CheckIcon />
+    <span>{title}</span>
+  </li>
+);
+
+const CheckIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="check-icon">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <path d="M12 2c-.218 0 -.432 .002 -.642 .005l-.616 .017l-.299 .013l-.579 .034l-.553 .046c-4.785 .464 -6.732 2.411 -7.196 7.196l-.046 .553l-.034 .579c-.005 .098 -.01 .198 -.013 .299l-.017 .616l-.004 .318l-.001 .324c0 .218 .002 .432 .005 .642l.017 .616l.013 .299l.034 .579l.046 .553c.464 4.785 2.411 6.732 7.196 7.196l.553 .046l.579 .034c.098 .005 .198 .01 .299 .013l.616 .017l.642 .005l.642 -.005l.616 -.017l.299 -.013l.579 -.034l.553 -.046c4.785 -.464 6.732 -2.411 7.196 -7.196l.046 -.553l.034 -.579c.005 -.098 .01 -.198 .013 -.299l.017 -.616l.005 -.642l-.005 -.642l-.017 -.616l-.013 -.299l-.034 -.579l-.046 -.553c-.464 -4.785 -2.411 -6.732 -7.196 -7.196l-.553 -.046l-.579 -.034a28.058 28.058 0 0 0 -.299 -.013l-.616 -.017l-.318 -.004l-.324 -.001zm2.293 7.293a1 1 0 0 1 1.497 1.32l-.083 .094l-4 4a1 1 0 0 1 -1.32 .083l-.094 -.083l-2 -2a1 1 0 0 1 1.32 -1.497l.094 .083l1.293 1.292l3.293 -3.292z" fill="currentColor" strokeWidth="0"/>
+  </svg>
+);
+
 const root = ReactDOM.createRoot(document.getElementById('react-root'));
-root.render(<DraggableCardDemo />);
+root.render(<CardSpotlightDemo />);
 </script>
 
 <script src="script.js"></script>
