@@ -1,45 +1,38 @@
 import { useState, useEffect, useCallback } from 'react'
 
-function getSystemTheme() {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+function getStoredTheme() {
+  const stored = localStorage.getItem('theme')
+  if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
+  return 'system'
 }
 
-function applyTheme(resolved) {
-  if (resolved === 'dark') {
-    document.documentElement.classList.add('dark')
-    document.documentElement.classList.remove('light')
-  } else {
-    document.documentElement.classList.remove('dark')
-    document.documentElement.classList.add('light')
-  }
+function getSystemTheme() {
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+}
+
+function applyTheme(theme) {
+  const resolved = theme === 'system' ? getSystemTheme() : theme
+  document.documentElement.classList.toggle('dark', resolved === 'dark')
+  document.documentElement.classList.toggle('light', resolved === 'light')
 }
 
 export default function useTheme() {
-  const [theme, setThemeState] = useState(() => {
-    const stored = localStorage.getItem('valis-theme')
-    return stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'dark'
-  })
-
-  const resolvedTheme = theme === 'system' ? getSystemTheme() : theme
-
-  const setTheme = useCallback((next) => {
-    setThemeState(next)
-    localStorage.setItem('valis-theme', next)
-    const resolved = next === 'system' ? getSystemTheme() : next
-    applyTheme(resolved)
-  }, [])
+  const [theme, setThemeState] = useState(getStoredTheme)
 
   useEffect(() => {
-    applyTheme(resolvedTheme)
-  }, [resolvedTheme])
+    applyTheme(theme)
+    localStorage.setItem('theme', theme)
+  }, [theme])
 
   useEffect(() => {
     if (theme !== 'system') return
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const handler = () => applyTheme(mq.matches ? 'dark' : 'light')
+    const mq = window.matchMedia('(prefers-color-scheme: light)')
+    const handler = () => applyTheme('system')
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [theme])
 
-  return { theme, setTheme, resolvedTheme }
+  const setTheme = useCallback((t) => setThemeState(t), [])
+
+  return { theme, setTheme }
 }

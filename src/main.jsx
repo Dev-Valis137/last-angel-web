@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import GravityStarsBackground from './GravityStarsBackground.jsx'
 import ThemeTogglerButton from './ThemeTogglerButton.jsx'
