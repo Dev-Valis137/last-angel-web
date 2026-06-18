@@ -15,6 +15,28 @@
   --ease-spring: cubic-bezier(0.2, 0.9, 0.4, 1);
 }
 html { scroll-behavior: smooth; }
+
+/* Light mode overrides */
+html.light {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --card-hover: #F0F0F5;
+  --text: #1A1A2E;
+  --text-secondary: #6B6B80;
+  --accent: #009999;
+  --accent-secondary: #7A00B8;
+  --border: #D0D0D8;
+}
+html.light nav {
+  background: rgba(245,245,247,0.8);
+  border-bottom-color: #D0D0D8;
+}
+html.light nav .nav-logo {
+  color: #009999;
+}
+html.light .hamburger span {
+  background: #1A1A2E;
+}
 body {
   font-family: var(--font-sans);
   background: var(--bg);
@@ -34,13 +56,13 @@ nav {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center;
   padding: 0 2rem;
 }
 .nav-logo {
   font-family: var(--font-mono);
   font-weight: 700; font-size: 1.1rem; color: var(--accent);
-  white-space: nowrap;
+  white-space: nowrap; margin-right: auto;
 }
 .nav-links { display: flex; gap: 1.25rem; list-style: none; }
 .nav-links a {
@@ -61,6 +83,29 @@ nav {
 .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; background: none; border: none; padding: 4px; }
 .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
 #nav-toggle { display: none; }
+#theme-toggle-target {
+  display: flex;
+  align-items: center;
+  margin-right: 0.75rem;
+}
+.theme-toggle-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  transition: color 0.25s var(--ease-spring), border-color 0.25s var(--ease-spring), box-shadow 0.25s var(--ease-spring);
+}
+.theme-toggle-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0,255,255,0.15);
+}
 
 /* === HERO === */
 .hero {
