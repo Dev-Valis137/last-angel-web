@@ -19,11 +19,13 @@ const CursorDot = () => (
 )
 
 ReactDOM.createRoot(document.getElementById('react-root')).render(
-  <>
-    <GravityStarsBackground />
-    <SmoothCursor cursor={<CursorDot />} />
-  </>
+  <GravityStarsBackground />
 )
+
+const cursorRoot = document.getElementById('cursor-root')
+if (cursorRoot) {
+  ReactDOM.createRoot(cursorRoot).render(<SmoothCursor cursor={<CursorDot />} />)
+}
 
 const toggleTarget = document.getElementById('theme-toggle-target')
 if (toggleTarget) {
