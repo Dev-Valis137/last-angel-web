@@ -11,7 +11,22 @@ const ATTR_NAMES = {
   carisma: 'Carisma', percepcion: 'Percepción', intuicion: 'Intuición', temple: 'Temple',
 }
 
+const STEPS = [
+  { num: 1, label: 'Datos', icon: '📌' },
+  { num: 2, label: 'Aspecto', icon: '👤' },
+  { num: 3, label: 'Psicología', icon: '🧠' },
+  { num: 4, label: 'Historia', icon: '📖' },
+  { num: 5, label: 'Atributos', icon: '🧬' },
+  { num: 6, label: 'Perks', icon: '🛠️' },
+  { num: 7, label: 'Progresión', icon: '📈' },
+  { num: 8, label: 'Vida', icon: '❤️' },
+  { num: 9, label: 'Economía', icon: '💰' },
+  { num: 10, label: 'Inventario', icon: '🎒' },
+  { num: 11, label: 'Notas', icon: '📝' },
+]
+
 export default function CharacterForm() {
+  const [step, setStep] = useState(1)
   const [attrs, setAttrs] = useState(Object.fromEntries(Object.keys(ATTR_NAMES).map(k => [k, MIN_ATTR])))
 
   const vals = Object.values(attrs)
@@ -34,6 +49,29 @@ export default function CharacterForm() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
   const [submitWarnings, setSubmitWarnings] = useState([])
+
+  const isDef = (id) => {
+    const el = document.querySelector(`[name="${id}"]`)
+    return el && !el.value.trim()
+  }
+
+  const requiredMissing = () => {
+    const reqs = [
+      [1, 'nombre'], [1, 'edad'], [1, 'origen'], [1, 'estado'],
+      [2, 'descripcion'],
+      [3, 'personalidad'], [3, 'virtudes'], [3, 'defectos'],
+      [4, 'trasfondo'], [4, 'motivacion'],
+    ]
+    return reqs.filter(([s]) => s === step).some(([, id]) => isDef(id))
+  }
+
+  const goNext = () => {
+    if (requiredMissing()) return
+    if (step === 5 && warnings.length > 0) return
+    if (step < STEPS.length) setStep(step + 1)
+  }
+
+  const goPrev = () => { if (step > 1) setStep(step - 1) }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -77,6 +115,8 @@ export default function CharacterForm() {
     )
   }
 
+  const s = (n) => step === n ? 'block' : 'none'
+
   return (
     <section id="web" style={{ marginTop: '2rem' }}>
       {error && (
@@ -84,11 +124,50 @@ export default function CharacterForm() {
           <p style={{ color: '#ff4444' }}>Error al enviar. Intenta de nuevo o contacta al staff.</p>
         </div>
       )}
+
+      {/* Stepper */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0,
+        marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem',
+      }}>
+        {STEPS.map((st, i) => (
+          <div key={st.num} style={{ display: 'flex', alignItems: 'center' }}>
+            <button type="button" onClick={() => setStep(st.num)}
+              style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem',
+                cursor: 'pointer', border: 'none', background: 'transparent', padding: '0.25rem 0.5rem',
+                minWidth: '60px', transition: 'opacity 0.2s',
+              }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700,
+                background: step === st.num ? 'var(--accent)' : step > st.num ? 'var(--accent-secondary)' : 'var(--border)',
+                color: step >= st.num ? '#000' : 'var(--text-secondary)',
+                transition: 'all 0.2s',
+              }}>
+                {step > st.num ? '✓' : st.icon}
+              </div>
+              <span style={{
+                fontSize: '0.6rem', color: step === st.num ? 'var(--text)' : 'var(--text-secondary)',
+                fontWeight: step === st.num ? 600 : 400, whiteSpace: 'nowrap',
+              }}>{st.label}</span>
+            </button>
+            {i < STEPS.length - 1 && (
+              <div style={{
+                width: 12, height: 2, background: step > st.num ? 'var(--accent-secondary)' : 'var(--border)',
+                transition: 'background 0.2s', flexShrink: 0,
+              }} />
+            )}
+          </div>
+        ))}
+      </div>
+
       <form name="character-sheet" method="POST" data-netlify="true" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         <input type="hidden" name="form-name" value="character-sheet" />
 
         {/* I. DATOS BÁSICOS */}
-        <div className="card">
+        <div className="card" style={{ display: s(1) }}>
           <h3>📌 I. Datos Básicos</h3>
           <div className="form-grid">
             <label>Nombre completo<input type="text" name="nombre" required /></label>
@@ -103,14 +182,14 @@ export default function CharacterForm() {
         </div>
 
         {/* II. ASPECTO */}
-        <div className="card">
+        <div className="card" style={{ display: s(2) }}>
           <h3>👤 II. Aspecto Físico y Estilo</h3>
           <label>Descripción física<textarea name="descripcion" rows={4} required placeholder="Mínimo 3 líneas" /></label>
           <label>Estilo de vestir<textarea name="vestir" rows={2} placeholder="¿Cómo te vistes para trabajar, robar o ir a una gala?" /></label>
         </div>
 
         {/* III. PSICOLOGÍA */}
-        <div className="card">
+        <div className="card" style={{ display: s(3) }}>
           <h3>🧠 III. Psicología</h3>
           <label>Personalidad<textarea name="personalidad" rows={4} required placeholder="Mínimo 3 líneas" /></label>
           <div className="form-grid">
@@ -121,18 +200,18 @@ export default function CharacterForm() {
         </div>
 
         {/* IV. HISTORIA */}
-        <div className="card">
+        <div className="card" style={{ display: s(4) }}>
           <h3>📖 IV. Historia y Motivaciones</h3>
           <label>Trasfondo<textarea name="trasfondo" rows={6} required placeholder="¿De dónde vienes? ¿Cómo llegaste a Arkham? Mínimo 5 líneas" /></label>
           <label>Motivación actual<textarea name="motivacion" rows={2} required placeholder="Dinero, venganza, poder, sobrevivir, justicia…" /></label>
         </div>
 
         {/* V. ATRIBUTOS */}
-        <div className="card">
-          <h3>🧬 V. Atributos (1–{MAX_ATTR})</h3>
+        <div className="card" style={{ display: s(5) }}>
+          <h3>🧬 V. Atributos (11–{MAX_ATTR})</h3>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
             Reparte <strong style={{ color: 'var(--accent)' }}>{INITIAL_POINTS} puntos</strong> entre los 7 atributos.
-            Gastados (sobre la base de 1): <strong style={{ color: remaining < 0 ? '#ff4444' : 'var(--accent)' }}>{spent}</strong> / {INITIAL_POINTS}
+            Gastados (sobre base 11): <strong style={{ color: remaining < 0 ? '#ff4444' : 'var(--accent)' }}>{spent}</strong> / {INITIAL_POINTS}
             {remaining >= 0 && <span> — Restantes: <strong style={{ color: 'var(--accent-secondary)' }}>{remaining}</strong></span>}
             {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste por {-remaining}!</span>}
           </p>
@@ -160,7 +239,7 @@ export default function CharacterForm() {
               return (
                 <div key={key} className="stat-item">
                   <div className="stat-label"><span>{label}</span><span style={{ fontFamily: 'var(--font-mono)', color: tierColor }}>{v}</span></div>
-                  <input type="range" min={1} max={MAX_ATTR} value={v} onChange={e => updateAttr(key, e.target.value)} style={{ width: '100%', accentColor: tierColor }} />
+                  <input type="range" min={MIN_ATTR} max={MAX_ATTR} value={v} onChange={e => updateAttr(key, e.target.value)} style={{ width: '100%', accentColor: tierColor }} />
                   <input type="hidden" name={`attr_${key}`} value={v} />
                 </div>
               )
@@ -169,7 +248,7 @@ export default function CharacterForm() {
         </div>
 
         {/* VI. PERKS */}
-        <div className="card">
+        <div className="card" style={{ display: s(6) }}>
           <h3>🛠️ VI. Perks <span className="sub">(máx. 2)</span></h3>
           {[1, 2].map(i => (
             <div key={i} style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}>
@@ -182,7 +261,7 @@ export default function CharacterForm() {
         </div>
 
         {/* VII. PROGRESIÓN */}
-        <div className="card">
+        <div className="card" style={{ display: s(7) }}>
           <h3>📈 VII. Progresión</h3>
           <div className="form-grid">
             <label>PD actuales<input type="number" name="pd_actuales" min={0} /></label>
@@ -192,7 +271,7 @@ export default function CharacterForm() {
         </div>
 
         {/* VIII. PV */}
-        <div className="card">
+        <div className="card" style={{ display: s(8) }}>
           <h3>❤️ VIII. Puntos de Vida</h3>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
             PV máximos: <strong style={{ color: 'var(--accent)' }}>50 + ({attrs.fisico} × 2) = {50 + attrs.fisico * 2}</strong>
@@ -205,7 +284,7 @@ export default function CharacterForm() {
         </div>
 
         {/* IX. ECONOMÍA */}
-        <div className="card">
+        <div className="card" style={{ display: s(9) }}>
           <h3>💰 IX. Economía y Recursos</h3>
           <div className="form-grid">
             <label>Créditos actuales<input type="number" name="creditos" min={0} /></label>
@@ -214,7 +293,7 @@ export default function CharacterForm() {
         </div>
 
         {/* X. INVENTARIO */}
-        <div className="card">
+        <div className="card" style={{ display: s(10) }}>
           <h3>🎒 X. Inventario</h3>
           <div className="form-grid">
             <label>Arma principal<input type="text" name="arma_principal" /></label>
@@ -226,14 +305,45 @@ export default function CharacterForm() {
         </div>
 
         {/* XI. NOTAS */}
-        <div className="card">
+        <div className="card" style={{ display: s(11) }}>
           <h3>📝 XI. Notas Adicionales</h3>
           <textarea name="notas" rows={4} placeholder="Contactos, secretos, enemigos, etc." />
         </div>
 
-        <button type="submit" className="btn-submit">
-          Enviar Ficha
-        </button>
+        {/* Navigation */}
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          gap: '1rem', marginTop: '0.5rem',
+        }}>
+          <button type="button" onClick={goPrev} disabled={step === 1}
+            style={{
+              padding: '0.6rem 1.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)',
+              background: 'transparent', color: 'var(--text)', cursor: step === 1 ? 'not-allowed' : 'pointer',
+              opacity: step === 1 ? 0.4 : 1, transition: 'all 0.2s',
+            }}>
+            ← Volver
+          </button>
+
+          <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+            {step} / {STEPS.length}
+          </span>
+
+          {step < STEPS.length ? (
+            <button type="button" onClick={goNext}
+              style={{
+                padding: '0.6rem 1.5rem', borderRadius: 'var(--radius)', border: 'none',
+                background: 'var(--accent)', color: '#000', cursor: 'pointer', fontWeight: 600,
+                opacity: (step === 5 && warnings.length > 0) || requiredMissing() ? 0.5 : 1,
+                transition: 'all 0.2s',
+              }}>
+              Continuar →
+            </button>
+          ) : (
+            <button type="submit" className="btn-submit" style={{ margin: 0 }}>
+              Enviar Ficha
+            </button>
+          )}
+        </div>
       </form>
     </section>
   )
