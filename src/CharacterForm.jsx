@@ -10,6 +10,24 @@ const ATTR_NAMES = {
 export default function CharacterForm() {
   const [attrs, setAttrs] = useState(Object.fromEntries(Object.keys(ATTR_NAMES).map(k => [k, 1])))
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    const data = new URLSearchParams()
+    for (const field of form.elements) {
+      if (field.name) data.append(field.name, field.value)
+    }
+    data.append('form-name', 'character-sheet')
+    try {
+      const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data })
+      if (res.ok) setSuccess(true)
+      else setError(true)
+    } catch {
+      setError(true)
+    }
+  }
 
   const total = Object.values(attrs).reduce((a, b) => a + b, 0)
   const remaining = INITIAL_POINTS - total
@@ -41,7 +59,12 @@ export default function CharacterForm() {
       <h2>Web de Fichas</h2>
       <p className="section-subtitle">Completa el formulario para solicitar tu ficha de personaje.</p>
 
-      <form netlify name="character-sheet" method="POST" data-netlify="true" onSubmit={() => setSuccess(true)} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      {error && (
+        <div className="card" style={{ borderColor: '#ff4444', textAlign: 'center', padding: '1rem', marginBottom: '1rem' }}>
+          <p style={{ color: '#ff4444' }}>Error al enviar. Intenta de nuevo o contacta al staff.</p>
+        </div>
+      )}
+      <form name="character-sheet" method="POST" data-netlify="true" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         <input type="hidden" name="form-name" value="character-sheet" />
 
         {/* I. DATOS BÁSICOS */}
