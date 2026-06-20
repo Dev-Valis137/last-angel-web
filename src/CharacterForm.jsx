@@ -1,7 +1,10 @@
 import { useState } from 'react'
 
 const INITIAL_POINTS = 130
-const MAX_INITIAL = 50
+const MAX_ATTR = 75
+const ELITE_MIN = 41
+const ELITE_MAX = 50
+const SUPERHUMAN_MIN = 51
 const ATTR_NAMES = {
   fisico: 'Físico', agilidad: 'Agilidad', intelecto: 'Intelecto',
   carisma: 'Carisma', percepcion: 'Percepción', intuicion: 'Intuición', temple: 'Temple',
@@ -9,11 +12,37 @@ const ATTR_NAMES = {
 
 export default function CharacterForm() {
   const [attrs, setAttrs] = useState(Object.fromEntries(Object.keys(ATTR_NAMES).map(k => [k, 1])))
+
+  const vals = Object.values(attrs)
+  const total = vals.reduce((a, b) => a + b, 0)
+  const remaining = INITIAL_POINTS - total
+
+  const countSuperhuman = vals.filter(v => v >= SUPERHUMAN_MIN).length
+  const countElite = vals.filter(v => v >= ELITE_MIN && v <= ELITE_MAX).length
+  const countAbove40 = vals.filter(v => v > 40).length
+  const hasElite = vals.some(v => v >= ELITE_MIN && v <= ELITE_MAX)
+
+  const warnings = []
+  if (countSuperhuman > 1) warnings.push('Solo puede haber 1 atributo sobrehumano (51-75)')
+  if (countElite > 2) warnings.push('Solo puede haber hasta 2 atributos Élite (41-50)')
+  if (countAbove40 > 0 && !hasElite) warnings.push('Debes tener al menos 1 atributo Élite (41-50)')
+  if (countAbove40 > 0) {
+    const nonEliteSuper = vals.filter(v => v > 40 && v < ELITE_MIN || v > ELITE_MAX)
+    if (nonEliteSuper.length > 0) warnings.push('Los atributos que no sean Élite ni Sobrehumano no pueden superar 40')
+  }
+  if (remaining < 0) warnings.push(`Te pasaste por ${-remaining} puntos`)
+
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
+  const [submitWarnings, setSubmitWarnings] = useState([])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (warnings.length > 0) {
+      setSubmitWarnings(warnings)
+      return
+    }
+    setSubmitWarnings([])
     const form = e.target
     const data = new URLSearchParams()
     for (const field of form.elements) {
@@ -29,11 +58,8 @@ export default function CharacterForm() {
     }
   }
 
-  const total = Object.values(attrs).reduce((a, b) => a + b, 0)
-  const remaining = INITIAL_POINTS - total
-
   const updateAttr = (key, val) => {
-    const v = Math.max(1, Math.min(MAX_INITIAL, Number(val) || 1))
+    const v = Math.max(1, Math.min(MAX_ATTR, Number(val) || 1))
     const current = attrs[key]
     const diff = v - current
     if (diff > remaining) return
@@ -104,24 +130,42 @@ export default function CharacterForm() {
 
         {/* V. ATRIBUTOS */}
         <div className="card">
-          <h3>🧬 V. Atributos (1–{MAX_INITIAL})</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+          <h3>🧬 V. Atributos (1–{MAX_ATTR})</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
             Reparte <strong style={{ color: 'var(--accent)' }}>{INITIAL_POINTS} puntos</strong> entre los 7 atributos.
             Usados: <strong style={{ color: remaining < 0 ? '#ff4444' : 'var(--accent)' }}>{total}</strong> / {INITIAL_POINTS}
             {remaining >= 0 && <span> — Restantes: <strong style={{ color: 'var(--accent-secondary)' }}>{remaining}</strong></span>}
             {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste!</span>}
           </p>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}>
-            <strong>Reglas de distribución:</strong> Máx. 1 Sobrehumano (51–75) · Máx. 2 Élite (41–50) · Mín. 1 Élite · El resto ≤ 40
-          </p>
+          <div style={{ fontSize: '0.82rem', marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <span style={{ color: 'var(--accent)' }}>◉ Sobrehumano (51-75)</span>
+            <span style={{ color: 'var(--accent-secondary)' }}>◉ Élite (41-50)</span>
+            <span style={{ color: 'var(--text-secondary)' }}>◉ Normal (1-40)</span>
+          </div>
+          {warnings.length > 0 && (
+            <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ff4444', borderRadius: 'var(--radius)', background: 'rgba(255,68,68,0.05)' }}>
+              {warnings.map((w, i) => <p key={i} style={{ color: '#ff4444', fontSize: '0.82rem' }}>⚠ {w}</p>)}
+            </div>
+          )}
+          {submitWarnings.length > 0 && (
+            <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ff4444', borderRadius: 'var(--radius)', background: 'rgba(255,68,68,0.05)' }}>
+              {submitWarnings.map((w, i) => <p key={i} style={{ color: '#ff4444', fontSize: '0.82rem' }}>⚠ {w}</p>)}
+            </div>
+          )}
           <div className="stat-grid">
-            {Object.entries(ATTR_NAMES).map(([key, label]) => (
-              <div key={key} className="stat-item">
-                <div className="stat-label"><span>{label}</span><span style={{ fontFamily: 'var(--font-mono)' }}>{attrs[key]}</span></div>
-                <input type="range" min={1} max={MAX_INITIAL} value={attrs[key]} onChange={e => updateAttr(key, e.target.value)} style={{ width: '100%' }} />
-                <input type="hidden" name={`attr_${key}`} value={attrs[key]} />
-              </div>
-            ))}
+            {Object.entries(ATTR_NAMES).map(([key, label]) => {
+              const v = attrs[key]
+              let tierColor = 'var(--text-secondary)'
+              if (v >= SUPERHUMAN_MIN) tierColor = 'var(--accent)'
+              else if (v >= ELITE_MIN) tierColor = 'var(--accent-secondary)'
+              return (
+                <div key={key} className="stat-item">
+                  <div className="stat-label"><span>{label}</span><span style={{ fontFamily: 'var(--font-mono)', color: tierColor }}>{v}</span></div>
+                  <input type="range" min={1} max={MAX_ATTR} value={v} onChange={e => updateAttr(key, e.target.value)} style={{ width: '100%', accentColor: tierColor }} />
+                  <input type="hidden" name={`attr_${key}`} value={v} />
+                </div>
+              )
+            })}
           </div>
         </div>
 
