@@ -15,7 +15,8 @@ export default function CharacterForm() {
 
   const vals = Object.values(attrs)
   const total = vals.reduce((a, b) => a + b, 0)
-  const remaining = INITIAL_POINTS - total
+  const spent = total - 7
+  const remaining = INITIAL_POINTS - spent
 
   const countSuperhuman = vals.filter(v => v >= SUPERHUMAN_MIN).length
   const countElite = vals.filter(v => v >= ELITE_MIN && v <= ELITE_MAX).length
@@ -30,7 +31,7 @@ export default function CharacterForm() {
     const nonEliteSuper = vals.filter(v => v > 40 && v < ELITE_MIN || v > ELITE_MAX)
     if (nonEliteSuper.length > 0) warnings.push('Los atributos que no sean Élite ni Sobrehumano no pueden superar 40')
   }
-  if (remaining < 0) warnings.push(`Te pasaste por ${-remaining} puntos`)
+  if (remaining < 0) warnings.push(`Te pasaste por ${-remaining} puntos (gastaste ${spent} de ${INITIAL_POINTS})`)
 
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
@@ -133,9 +134,9 @@ export default function CharacterForm() {
           <h3>🧬 V. Atributos (1–{MAX_ATTR})</h3>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
             Reparte <strong style={{ color: 'var(--accent)' }}>{INITIAL_POINTS} puntos</strong> entre los 7 atributos.
-            Usados: <strong style={{ color: remaining < 0 ? '#ff4444' : 'var(--accent)' }}>{total}</strong> / {INITIAL_POINTS}
+            Gastados (sobre la base de 1): <strong style={{ color: remaining < 0 ? '#ff4444' : 'var(--accent)' }}>{spent}</strong> / {INITIAL_POINTS}
             {remaining >= 0 && <span> — Restantes: <strong style={{ color: 'var(--accent-secondary)' }}>{remaining}</strong></span>}
-            {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste!</span>}
+            {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste por {-remaining}!</span>}
           </p>
           <div style={{ fontSize: '0.82rem', marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
             <span style={{ color: 'var(--accent)' }}>◉ Sobrehumano (51-75)</span>
