@@ -467,3 +467,28 @@ footer {
   transform: scale(1.03);
   box-shadow: 0 0 24px rgba(0, 255, 255, 0.3);
 }
+
+/* === LORE === */
+.faction-block {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: rgba(0, 255, 255, 0.02);
+  transition: background 0.25s var(--ease-spring), border-color 0.25s var(--ease-spring);
+}
+.faction-block:hover {
+  background: rgba(0, 255, 255, 0.04);
+  border-left-color: var(--accent-secondary);
+}
+.faction-block h4 {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.faction-block p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
