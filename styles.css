@@ -1,6 +1,11 @@
-@import "tailwindcss";
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.skip-link {
+  position: absolute; top: -100px; left: 0; z-index: 10000;
+  background: var(--accent); color: #000; padding: 0.75rem 1.5rem;
+  font-family: var(--font-mono); font-weight: 600; font-size: 0.85rem;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 0; }
 @media (hover: hover) and (pointer: fine) {
   *, *::before, *::after { cursor: none !important; }
 }
@@ -95,25 +100,6 @@ nav {
   align-items: center;
   margin-left: 0.75rem;
 }
-.theme-toggle-btn {
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  transition: color 0.25s var(--ease-spring), border-color 0.25s var(--ease-spring), box-shadow 0.25s var(--ease-spring);
-}
-.theme-toggle-btn:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  box-shadow: 0 0 12px rgba(0,255,255,0.15);
-}
-
 /* === HERO === */
 .hero {
   min-height: 100vh; display: flex; flex-direction: column;
@@ -323,20 +309,6 @@ tbody td:first-child { color: var(--text); font-weight: 500; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* (spotlight-card moved to .card-spotlight above) */
-
-/* === LIGHT THEME === */
-html.light {
-  --bg: #F0F0F0;
-  --card: #FFFFFF;
-  --card-hover: #F5F5FF;
-  --text: #1A1A1A;
-  --text-secondary: #666666;
-  --accent: #0088CC;
-  --accent-secondary: #8800CC;
-  --border: #D0D0D0;
-  --nav-bg: rgba(240,240,240,0.85);
-  --nav-dropdown-bg: rgba(240,240,240,0.97);
-}
 
 /* === THEME TOGGLE === */
 .theme-toggle-btn {

@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LAST ANGEL · ARKHAM — Sistema de Juego</title>
+<title>LAST ANGEL · ARKHAM — Sistema de Juego</title>
+<meta name="description" content="Sistema de juego cyberpunk para el servidor de rol LAST ANGEL. Reglas, atributos, perks, combate, economía y fichas de personaje en Arkham.">
+<meta property="og:title" content="LAST ANGEL · ARKHAM — Sistema de Juego">
+<meta property="og:description" content="Reglas, economía, combate, perks y progresión para el servidor de rol LAST ANGEL.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://last-angel-web.netlify.app">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕶️</text></svg>">
   <script>
     (function() {
       var t = localStorage.getItem('valis-theme') || 'dark';
@@ -22,8 +28,10 @@
 <div id="react-root" style="position:fixed;inset:0;pointer-events:none"></div>
 <div id="cursor-root" style="position:fixed;inset:0;z-index:99999;pointer-events:none"></div>
 
+<a href="#lore" class="skip-link">Saltar al contenido principal</a>
+
 <!-- ===== NAV ===== -->
-<nav>
+<nav aria-label="Navegación principal">
   <span class="nav-logo">🕶️ VALIS/137</span>
   <input type="checkbox" id="nav-toggle" autocomplete="off">
   <label for="nav-toggle" class="hamburger" aria-label="Menú">
@@ -38,6 +46,7 @@
     <li><a href="#juicios">Legal</a></li>
     <li><a href="#combate">Combate</a></li>
     <li><a href="#fichas">Fichas</a></li>
+    <li><a href="#web">Web</a></li>
   </ul>
   <div id="theme-toggle-target"></div>
 </nav>
@@ -224,6 +233,44 @@
       </div>
     </div>
   </div>
+
+  <div class="grid-2" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>🏦 Riqueza y Nivel de Vida</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nivel</th><th>Créditos/mes</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td>Indigencia</td><td>0–500</td><td>Vives en el Sump, comes de la basura</td></tr>
+            <tr><td>Clase baja</td><td>500–2000</td><td>Trabajo precario, alquiler en zona baja</td></tr>
+            <tr><td>Clase media</td><td>2000–5000</td><td>Trabajo estable, alquiler en The Grid</td></tr>
+            <tr><td>Clase alta</td><td>5000–15000</td><td>Profesional exitoso, vives en el Spire</td></tr>
+            <tr><td>Rico</td><td>15000–50000</td><td>Ejecutivo, dueño de negocio</td></tr>
+            <tr><td>Élite corporativa</td><td>50000+</td><td>Dueño de la ciudad (o casi)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🛒 Precios de Referencia</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Artículo</th><th>Precio</th></tr></thead>
+          <tbody>
+            <tr><td>Comida callejera</td><td class="highlight">10cr</td></tr>
+            <tr><td>Habitación de motel (noche)</td><td class="highlight">80cr</td></tr>
+            <tr><td>Ropa básica</td><td class="highlight">100–300cr</td></tr>
+            <tr><td>Ropa elegante</td><td class="highlight">500–2000cr</td></tr>
+            <tr><td>Comunicador</td><td class="highlight">200cr</td></tr>
+            <tr><td>Kit de primeros auxilios</td><td class="highlight">150cr</td></tr>
+            <tr><td>Linterna táctica</td><td class="highlight">50cr</td></tr>
+            <tr><td>Drogas (dosis)</td><td class="highlight">50–300cr</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ===== 2. ATRIBUTOS ===== -->
@@ -404,7 +451,69 @@
   </div>
 </section>
 
-<!-- ===== 4. RESOLUCIÓN ===== -->
+<!-- ===== 4. CIBERWARE ===== -->
+<section id="ciberware">
+  <h2>Ciberware e Implantes</h2>
+  <p class="section-subtitle">Mejoras cibernéticas que potencian tu cuerpo. Cada implante tiene un coste en créditos y un requisito mínimo de atributo.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🧬 Implantes Físicos</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Implante</th><th>Efecto</th><th>Precio</th><th>Requisito</th></tr></thead>
+          <tbody>
+            <tr><td>Refuerzo óseo</td><td>+5 daño cuerpo a cuerpo, resistencia a fracturas</td><td class="highlight">3000cr</td><td>Físico 35+</td></tr>
+            <tr><td>Músculos hidráulicos</td><td>+10 Físico para acciones de fuerza</td><td class="highlight">5000cr</td><td>Físico 40+</td></tr>
+            <tr><td>Piel reforzada</td><td>+3 armadura natural (en todas las zonas)</td><td class="highlight">4000cr</td><td>Físico 30+</td></tr>
+            <tr><td>Ojo cibernético</td><td>+5 Percepción, visión nocturna, zoom 10×</td><td class="highlight">4500cr</td><td>Percepción 30+</td></tr>
+            <tr><td>Oído amplificado</td><td>+5 Percepción (auditiva), escuchar a 100m</td><td class="highlight">2500cr</td><td>Percepción 25+</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧠 Implantes Mentales</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Implante</th><th>Efecto</th><th>Precio</th><th>Requisito</th></tr></thead>
+          <tbody>
+            <tr><td>Interfaz neural</td><td>Conexión directa a sistemas, +5 hacking</td><td class="highlight">6000cr</td><td>Intelecto 35+</td></tr>
+            <tr><td>Procesador táctico</td><td>+5 a Iniciativa, +5 a Resolución (análisis)</td><td class="highlight">5500cr</td><td>Intelecto 40+</td></tr>
+            <tr><td>Estimulador adrenal</td><td>1 vez/combate: +15 a Físico o Agilidad por 3 turnos</td><td class="highlight">3500cr</td><td>Temple 30+</td></tr>
+            <tr><td>Marcador de objetivos</td><td>+10 al disparar, objetivo marcado no puede esconderse</td><td class="highlight">4000cr</td><td>Agilidad 30+</td></tr>
+            <tr><td>Traductor universal</td><td>Comprender cualquier idioma hablado/escrito</td><td class="highlight">2000cr</td><td>Intelecto 20+</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>⚙️ Reglas de Ciberware</h3>
+      <ul>
+        <li><strong>Límite de implantes:</strong> Físico ÷ 10 (mín. 1, máx. 7). Cada implante cuenta como 1 independientemente de su tamaño.</li>
+        <li><strong>Instalación:</strong> requiere cirujano especializado y 48h. El coste de instalación es el 30% del precio del implante.</li>
+        <li><strong>Rechazo:</strong> si tu Temple es menor que el número de implantes, tiras 1d100 cada semana. 1–10 = rechazo (pierdes el implante, 2d10 daño).</li>
+        <li><strong>Mercado negro:</strong> implantes sin registrar cuestan 40% menos pero tienen 3× más riesgo de rechazo.</li>
+        <li><strong>Humanidad:</strong> demasiados implantes te distancian de lo humano. A discreción del master, penalizaciones sociales si superas Físico ÷ 5 implantes.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🏪 Ciberclínicas en Arkham</h3>
+      <ul>
+        <li><strong>Arclight Medical (Spire):</strong> la mejor. Implantes legales, garantía, discreción. Precios oficiales + 20%.</li>
+        <li><strong>Dr. Voss (The Grid):</strong> calidad media, precios justos. A veces "pierde" expedientes.</li>
+        <li><strong>El Carnicero (Sump):</strong> ilegal, sucio, barato (−50% precio). 2× riesgo de infección. No preguntes de dónde saca los implantes.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. RESOLUCIÓN ===== -->
 <section id="resolucion">
   <h2>Resolución de Acciones</h2>
   <p class="section-subtitle">Sistema híbrido: narrativa con apoyo de dados en momentos de tensión.</p>
@@ -433,12 +542,45 @@
     <div class="card">
       <h3>⚔️ PvP</h3>
       <p>Enfrentamiento directo: el resultado <strong>más alto</strong> gana. Ambos tiran <em>Atributo + 1d100</em>.</p>
-      <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-secondary)">📌 Los dados solo se usan en <strong>momentos de tensión</strong> donde el resultado sea incierto. El resto es narrativo.</p>
     </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>➕ Modificadores</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Situación</th><th>Modificador</th></tr></thead>
+          <tbody>
+            <tr><td>Condiciones favorables</td><td>+10 a +20</td></tr>
+            <tr><td>Condiciones adversas</td><td>−10 a −30</td></tr>
+            <tr><td>Herido leve</td><td>−10</td></tr>
+            <tr><td>Herido grave</td><td>−25</td></tr>
+            <tr><td>Herramientas adecuadas</td><td>+10</td></tr>
+            <tr><td>Sin herramientas</td><td>−20</td></tr>
+            <tr><td>Ayuda de un aliado</td><td>+10</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎲 Tipos de tirada</h3>
+      <ul>
+        <li><strong>Tirada abierta:</strong> si sacas 96–100 en el d100, puedes volver a tirar y sumar el resultado</li>
+        <li><strong>Tirada con ventaja:</strong> tira dos d100 y quédate con el mayor (situación muy favorable)</li>
+        <li><strong>Tirada con desventaja:</strong> tira dos d100 y quédate con el menor (situación muy adversa)</li>
+        <li><strong>Tirada en equipo:</strong> suma los atributos de los participantes, tira un solo d100</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.25rem;border-color:var(--accent-secondary)">
+    <p style="text-align:center;color:var(--text-secondary)">📌 Los dados solo se usan en <strong style="color:var(--accent)">momentos de tensión</strong> donde el resultado sea incierto. Acciones cotidianas se resuelven narrativamente.</p>
   </div>
 </section>
 
-<!-- ===== 5. JUICIOS ===== -->
+<!-- ===== 6. JUICIOS ===== -->
 <section id="juicios">
   <h2>Juicios y Sistema Legal</h2>
   <p class="section-subtitle">Proceso judicial completo en 6 pasos. La ley de Arkham es implacable.</p>
@@ -453,7 +595,7 @@
   </div>
 </section>
 
-<!-- ===== 6. COMBATE ===== -->
+<!-- ===== 7. COMBATE ===== -->
 <section id="combate">
   <h2>Combate</h2>
   <p class="section-subtitle">Sistema principalmente narrativo. Los dados solo entran en tensión extrema.</p>
@@ -493,9 +635,204 @@
       <p style="margin-top:0.5rem">0 PV = <span class="highlight-purple">inconsciente</span>. La muerte solo ocurre con <strong>consenso</strong> de todas las partes.</p>
     </div>
   </div>
+
+  <div class="grid-2" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>🎯 Precisión y Cobertura</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Situación</th><th>Modificador al ataque</th></tr></thead>
+          <tbody>
+            <tr><td>A corta distancia (cuerpo a cuerpo / 5m)</td><td>+10</td></tr>
+            <tr><td>A distancia media (5–30m)</td><td>0</td></tr>
+            <tr><td>A distancia larga (31–60m)</td><td>−10</td></tr>
+            <tr><td>A distancia extrema (61–100m)</td><td>−25</td></tr>
+            <tr><td>Objetivo en cobertura parcial</td><td>−10</td></tr>
+            <tr><td>Objetivo en cobertura total</td><td>−25 (o inmune)</td></tr>
+            <tr><td>Disparo apuntado (cabeza/mano)</td><td>−15, daño × 1.5</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>💥 Críticos y Pifias</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Resultado</th><th>Efecto</th></tr></thead>
+          <tbody>
+            <tr><td>d100 = 1</td><td><span class="highlight-purple">Pifia</span> — fallo catastrófico (arma se encasquilla, caída, golpe a aliado)</td></tr>
+            <tr><td>d100 = 96–100</td><td><span class="highlight">Crítico</span> — daño × 2, efecto adicional narrativo</td></tr>
+            <tr><td>Superar CD por 30+</td><td><span class="highlight">Acierto perfecto</span> — daño +50% o efecto especial</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>🩸 Estados alterados</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Estado</th><th>Efecto</th></tr></thead>
+          <tbody>
+            <tr><td>Sano</td><td>Sin penalizaciones</td></tr>
+            <tr><td>Herido leve</td><td>−10 a todas las acciones</td></tr>
+            <tr><td>Herido grave</td><td>−25 a todas las acciones, movimiento reducido</td></tr>
+            <tr><td>Inconsciente</td><td>0 PV, no puede actuar, estable sin atención médica</td></tr>
+            <tr><td>Al borde de la muerte</td><td>PV negativos, necesita atención médica inmediata o muere</td></tr>
+            <tr><td>Aturdido</td><td>Pierde el siguiente turno</td></tr>
+            <tr><td>Sangrando</td><td>Pierde 5 PV por turno hasta que reciba primeros auxilios</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🏥 Curación y Recuperación</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Método</th><th>PV recuperados</th><th>Coste</th></tr></thead>
+          <tbody>
+            <tr><td>Descanso corto (1h)</td><td>1d10</td><td>—</td></tr>
+            <tr><td>Descanso largo (8h)</td><td>3d10 + Temple</td><td>—</td></tr>
+            <tr><td>Primeros auxilios</td><td>1d10 + Intelecto ÷ 10</td><td>Materiales 50cr</td></tr>
+            <tr><td>Hospital público</td><td>2d10 + Intelecto ÷ 5</td><td>500cr (o seguro)</td></tr>
+            <tr><td>Hospital privado</td><td>4d10 + Intelecto ÷ 3</td><td>2000cr (o seguro élite)</td></tr>
+            <tr><td>Cirugía</td><td>Recuperar de herida grave</td><td>5000cr</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>⚡ Acciones de Combate</h3>
+      <ul>
+        <li><strong>Ataque básico:</strong> una acción, un ataque</li>
+        <li><strong>Ataque rápido:</strong> −10 al ataque, puedes hacer dos ataques (armas ligeras)</li>
+        <li><strong>Defensa total:</strong> +20 a defensa, no puedes atacar este turno</li>
+        <li><strong>Retirada:</strong> Agilidad + 1d100 vs CD 50 para retirarte sin recibir ataque de oportunidad</li>
+        <li><strong>Derribo / Presa:</strong> Físico + 1d100 vs Físico + 1d100 del objetivo</li>
+        <li><strong>Desarmar:</strong> −10 al ataque; si aciertas, el objetivo suelta su arma</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🔫 Munición y Recarga</h3>
+      <ul>
+        <li><strong>Armas ligeras:</strong> 15–18 balas por cargador</li>
+        <li><strong>Armas pesadas:</strong> 6–10 balas por cargador</li>
+        <li><strong>Recargar:</strong> acción completa (solo atacar o recargar, no ambos)</li>
+        <li><strong>Recarga rápida:</strong> Agilidad + 1d100 vs CD 50 — acción de movimiento</li>
+        <li><strong>Munición escasea:</strong> conseguir balas ilegales cuesta 2× el precio de mercado</li>
+      </ul>
+    </div>
+  </div>
 </section>
 
-<!-- ===== 7. FICHAS ===== -->
+<!-- ===== 8. EQUIPO ===== -->
+<section id="equipo">
+  <h2>Equipo y Armamento</h2>
+  <p class="section-subtitle">Armas, armaduras y equipo táctico. Todo tiene un precio y un peso en la mochila.</p>
+
+  <div class="card">
+    <h3>🔫 Armas Cuerpo a Cuerpo</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Arma</th><th>Daño</th><th>Peso</th><th>Precio</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr><td>Puños / Patadas</td><td>Físico ÷ 10</td><td>—</td><td>—</td><td>Sin penalización social</td></tr>
+          <tr><td>Cuchillo / Navaja</td><td>Físico ÷ 8</td><td>Ligero</td><td class="highlight">100cr</td><td>Ocultable, +5 desarmar</td></tr>
+          <tr><td>Bate / Tubo</td><td>Físico ÷ 6</td><td>Medio</td><td class="highlight">150cr</td><td>Contundente, riesgo de fractura</td></tr>
+          <tr><td>Machete / Katana</td><td>Físico ÷ 5</td><td>Medio</td><td class="highlight">500cr</td><td>Corte profundo, sangrado</td></tr>
+          <tr><td>Martillo de demolición</td><td>Físico ÷ 4</td><td>Pesado</td><td class="highlight">800cr</td><td>2 manos, derribo automático si acierta</td></tr>
+          <tr><td>Motosierra</td><td>Físico ÷ 3</td><td>Pesado</td><td class="highlight">1200cr</td><td>2 manos, sangrado severo, ruidosa</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.25rem">
+    <h3>🔫 Armas de Fuego</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Arma</th><th>Daño</th><th>Alcance</th><th>Munic.</th><th>Peso</th><th>Precio</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr><td>Revólver ligero</td><td>Agilidad ÷ 6</td><td>30m</td><td>6</td><td>Ligero</td><td class="highlight">400cr</td><td>Ocultable, fiable</td></tr>
+          <tr><td>Pistola semiautomática</td><td>Agilidad ÷ 7</td><td>40m</td><td>15</td><td>Ligero</td><td class="highlight">600cr</td><td>Estándar de la policía</td></tr>
+          <tr><td>Pistola automática</td><td>Agilidad ÷ 8</td><td>35m</td><td>18</td><td>Medio</td><td class="highlight">900cr</td><td>Ráfaga 3 balas</td></tr>
+          <tr><td>Subfusil</td><td>Agilidad ÷ 7</td><td>50m</td><td>30</td><td>Medio</td><td class="highlight">1500cr</td><td>Ráfaga / automático</td></tr>
+          <tr><td>Escopeta</td><td>Agilidad ÷ 5</td><td>20m</td><td>6</td><td>Medio</td><td class="highlight">1200cr</td><td>+10 a corta distancia</td></tr>
+          <tr><td>Fusil de asalto</td><td>Agilidad ÷ 6</td><td>100m</td><td>30</td><td>Pesado</td><td class="highlight">2500cr</td><td>Ráfaga / automático</td></tr>
+          <tr><td>Fusil de francotirador</td><td>Percepción ÷ 5</td><td>300m</td><td>5</td><td>Pesado</td><td class="highlight">4000cr</td><td>2 manos, +15 apuntado</td></tr>
+          <tr><td>Lanzagranadas</td><td>Agilidad ÷ 3</td><td>60m</td><td>1</td><td>Mochila</td><td class="highlight">6000cr</td><td>Explosivo 5m radio</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-secondary)"><strong>Ráfaga:</strong> +5 al ataque, gasta 3 balas. <strong>Automático:</strong> +10 al ataque, gasta 5 balas, puede impactar a 2 objetivos adyacentes.</p>
+  </div>
+
+  <div class="card" style="margin-top:1.25rem">
+    <h3>🛡️ Armaduras</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Armadura</th><th>Protección</th><th>Cobertura</th><th>Peso</th><th>Precio</th><th>Penalización</th></tr></thead>
+        <tbody>
+          <tr><td>Ropa reforzada</td><td>2</td><td>Torso, brazos</td><td>Ligero</td><td class="highlight">500cr</td><td>—</td></tr>
+          <tr><td>Chaleco antibalas</td><td>5</td><td>Torso</td><td>Medio</td><td class="highlight">1500cr</td><td>−5 Agilidad</td></tr>
+          <tr><td>Chaleco táctico</td><td>8</td><td>Torso, hombros</td><td>Pesado</td><td class="highlight">3000cr</td><td>−10 Agilidad</td></tr>
+          <tr><td>Armadura completa</td><td>12</td><td>Cuerpo entero</td><td>Mochila</td><td class="highlight">8000cr</td><td>−15 Agilidad, −5 Percepción</td></tr>
+          <tr><td>Traje de combate (Kevlar+)</td><td>15</td><td>Cuerpo entero</td><td>Exosuit</td><td class="highlight">15000cr</td><td>Requiere Físico 40+</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-secondary)"><strong>Protección:</strong> reduce el daño recibido en esa cantidad. La armadura se degrada — cada 20 PV absorbidos pierde 1 punto de protección hasta ser reparada.</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>🎒 Equipo Táctico</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Artículo</th><th>Precio</th><th>Efecto</th></tr></thead>
+          <tbody>
+            <tr><td>Granada de humo</td><td class="highlight">200cr</td><td>Cobertura total visual 3 turnos</td></tr>
+            <tr><td>Granada aturdidora</td><td class="highlight">300cr</td><td>Aturde 1 turno (CD 70 Temple para resistir)</td></tr>
+            <tr><td>Granada fragmentación</td><td class="highlight">500cr</td><td>5d10 daño, 5m radio</td></tr>
+            <tr><td>Bengala química</td><td class="highlight">30cr</td><td>Ilumina 20m, 6h</td></tr>
+            <tr><td>Grapnel / Ascensor</td><td class="highlight">400cr</td><td>Escalar 30m</td></tr>
+            <tr><td>Walkie encriptado</td><td class="highlight">250cr</td><td>Comunicación 5km, seguro</td></tr>
+            <tr><td>Gafas de visión nocturna</td><td class="highlight">800cr</td><td>Ver en oscuridad total</td></tr>
+            <tr><td>Dron de reconocimiento</td><td class="highlight">2000cr</td><td>Vuelo 30min, cámara HD</td></tr>
+            <tr><td>Kit de ganzúas</td><td class="highlight">200cr</td><td>+10 abrir cerraduras</td></tr>
+            <tr><td>Medikit avanzado</td><td class="highlight">600cr</td><td>+10 a primeros auxilios</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📦 Capacidad de Carga</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Peso total</th><th>Efecto</th></tr></thead>
+          <tbody>
+            <tr><td>Ligero (0–3)</td><td>Sin penalización</td></tr>
+            <tr><td>Medio (4–6)</td><td>−5 Agilidad</td></tr>
+            <tr><td>Pesado (7–10)</td><td>−10 Agilidad, −5 Percepción</td></tr>
+            <tr><td>Sobrecargado (11+)</td><td>−15 Agilidad, no puedes correr</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:0.5rem;font-size:0.82rem;color:var(--text-secondary)">Tu límite de carga = Físico ÷ 5. Cada arma/armadura indica su peso. Objetos pequeños no cuentan (llaves, comunicador, cartera).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 9. FICHAS ===== -->
 <section id="fichas">
   <h2>Fichas de Personaje</h2>
   <p class="section-subtitle">Creación, aprobación y gestión de tu personaje en LAST ANGEL.</p>
@@ -523,7 +860,7 @@
   </div>
 </section>
 
-<!-- ===== 8. WEB ===== -->
+<!-- ===== 10. WEB ===== -->
 <section id="web">
   <div id="character-form-root"></div>
   <form name="character-sheet" netlify hidden>

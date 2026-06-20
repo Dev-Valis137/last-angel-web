@@ -27,6 +27,8 @@ const STEPS = [
 
 export default function CharacterForm() {
   const [step, setStep] = useState(1)
+  const [completed, setCompleted] = useState(new Set())
+  const [loading, setLoading] = useState(false)
   const [attrs, setAttrs] = useState(Object.fromEntries(Object.keys(ATTR_NAMES).map(k => [k, MIN_ATTR])))
 
   const vals = Object.values(attrs)
@@ -65,13 +67,20 @@ export default function CharacterForm() {
     return reqs.filter(([s]) => s === step).some(([, id]) => isDef(id))
   }
 
+  const canJump = (n) => n <= step || completed.has(n - 1) || (n === step + 1)
+
   const goNext = () => {
     if (requiredMissing()) return
     if (step === 5 && warnings.length > 0) return
-    if (step < STEPS.length) setStep(step + 1)
+    if (step < STEPS.length) {
+      setCompleted(prev => new Set(prev).add(step))
+      setStep(step + 1)
+    }
   }
 
   const goPrev = () => { if (step > 1) setStep(step - 1) }
+
+  const goToStep = (n) => { if (canJump(n)) setStep(n) }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -80,6 +89,7 @@ export default function CharacterForm() {
       return
     }
     setSubmitWarnings([])
+    setLoading(true)
     const form = e.target
     const data = new URLSearchParams()
     for (const field of form.elements) {
@@ -92,6 +102,8 @@ export default function CharacterForm() {
       else setError(true)
     } catch {
       setError(true)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -106,7 +118,7 @@ export default function CharacterForm() {
   if (success) {
     return (
       <section id="web" style={{ marginTop: '2rem' }}>
-        <div class="card" style={{ textAlign: 'center', padding: '3rem' }}>
+        <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
           <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>¡Ficha enviada!</h3>
           <p style={{ color: 'var(--text-secondary)' }}>Un miembro del staff revisará tu solicitud. Pronto recibirás respuesta.</p>
@@ -132,11 +144,11 @@ export default function CharacterForm() {
       }}>
         {STEPS.map((st, i) => (
           <div key={st.num} style={{ display: 'flex', alignItems: 'center' }}>
-            <button type="button" onClick={() => setStep(st.num)}
+            <button type="button" onClick={() => goToStep(st.num)}
               style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem',
-                cursor: 'pointer', border: 'none', background: 'transparent', padding: '0.25rem 0.5rem',
-                minWidth: '60px', transition: 'opacity 0.2s',
+                cursor: canJump(st.num) ? 'pointer' : 'not-allowed', border: 'none', background: 'transparent', padding: '0.25rem 0.5rem',
+                minWidth: '60px', opacity: canJump(st.num) ? 1 : 0.4, transition: 'opacity 0.2s',
               }}>
               <div style={{
                 width: 32, height: 32, borderRadius: '50%',
@@ -339,8 +351,8 @@ export default function CharacterForm() {
               Continuar →
             </button>
           ) : (
-            <button type="submit" className="btn-submit" style={{ margin: 0 }}>
-              Enviar Ficha
+            <button type="submit" className="btn-submit" style={{ margin: 0 }} disabled={loading}>
+              {loading ? 'Enviando...' : 'Enviar Ficha'}
             </button>
           )}
         </div>
