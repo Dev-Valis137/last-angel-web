@@ -1,38 +1,35 @@
 import { useState } from 'react'
 
 const INITIAL_POINTS = 130
-const MAX_ATTR = 100
+const MAX_ATTR = 75
+const MIN_ATTR = 11
 const COMPETENTE_MAX = 50
 const ELITE_MIN = 51
 const ELITE_MAX = 75
-const SUPERHUMAN_MIN = 76
 const ATTR_NAMES = {
   fisico: 'Físico', agilidad: 'Agilidad', intelecto: 'Intelecto',
   carisma: 'Carisma', percepcion: 'Percepción', intuicion: 'Intuición', temple: 'Temple',
 }
 
 export default function CharacterForm() {
-  const [attrs, setAttrs] = useState(Object.fromEntries(Object.keys(ATTR_NAMES).map(k => [k, 1])))
+  const [attrs, setAttrs] = useState(Object.fromEntries(Object.keys(ATTR_NAMES).map(k => [k, MIN_ATTR])))
 
   const vals = Object.values(attrs)
   const total = vals.reduce((a, b) => a + b, 0)
-  const spent = total - 7
+  const spent = total - 7 * MIN_ATTR
   const remaining = INITIAL_POINTS - spent
 
-  const countSuperhuman = vals.filter(v => v >= SUPERHUMAN_MIN).length
   const countElite = vals.filter(v => v >= ELITE_MIN && v <= ELITE_MAX).length
   const countAbove50 = vals.filter(v => v > COMPETENTE_MAX).length
   const hasElite = vals.some(v => v >= ELITE_MIN && v <= ELITE_MAX)
+  const hasDeficient = vals.some(v => v < MIN_ATTR)
 
   const warnings = []
-  if (countSuperhuman > 1) warnings.push('Solo puede haber 1 atributo Sobrehumano (76-99)')
+  if (remaining < 0) warnings.push(`Te pasaste por ${-remaining} puntos (gastaste ${spent} de ${INITIAL_POINTS})`)
   if (countElite > 2) warnings.push('Solo puede haber hasta 2 atributos Élite (51-75)')
   if (countAbove50 > 0 && !hasElite) warnings.push('Debes tener al menos 1 atributo Élite (51-75)')
-  if (countAbove50 > 0) {
-    const bad = vals.filter(v => v > COMPETENTE_MAX && (v < ELITE_MIN || v > ELITE_MAX) && v < SUPERHUMAN_MIN)
-    if (bad.length > 0) warnings.push('Los atributos que no sean Élite ni Sobrehumano no pueden superar 50')
-  }
-  if (remaining < 0) warnings.push(`Te pasaste por ${-remaining} puntos (gastaste ${spent} de ${INITIAL_POINTS})`)
+  if (hasDeficient) warnings.push('No puede haber atributos por debajo de 11 (rango Deficiente no disponible en creación)')
+  if (vals.some(v => v > MAX_ATTR)) warnings.push('Los atributos no pueden superar 75 en creación (Sobrehumano y Pico Humano se obtienen con PD)')
 
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
@@ -61,7 +58,7 @@ export default function CharacterForm() {
   }
 
   const updateAttr = (key, val) => {
-    const v = Math.max(1, Math.min(MAX_ATTR, Number(val) || 1))
+    const v = Math.max(MIN_ATTR, Math.min(MAX_ATTR, Number(val) || MIN_ATTR))
     const current = attrs[key]
     const diff = v - current
     if (diff > remaining) return
@@ -140,9 +137,9 @@ export default function CharacterForm() {
             {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste por {-remaining}!</span>}
           </p>
           <div style={{ fontSize: '0.82rem', marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <span style={{ color: 'var(--accent)' }}>◉ Sobrehumano (76-99)</span>
             <span style={{ color: 'var(--accent-secondary)' }}>◉ Élite (51-75)</span>
-            <span style={{ color: 'var(--text-secondary)' }}>◉ Competente (1-50)</span>
+            <span style={{ color: '#FFD700' }}>◉ Competente (31-50)</span>
+            <span style={{ color: 'var(--text-secondary)' }}>◉ Promedio (11-30)</span>
           </div>
           {warnings.length > 0 && (
             <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ff4444', borderRadius: 'var(--radius)', background: 'rgba(255,68,68,0.05)' }}>
@@ -158,8 +155,7 @@ export default function CharacterForm() {
             {Object.entries(ATTR_NAMES).map(([key, label]) => {
               const v = attrs[key]
               let tierColor = 'var(--text-secondary)'
-              if (v >= SUPERHUMAN_MIN) tierColor = 'var(--accent)'
-              else if (v >= ELITE_MIN) tierColor = 'var(--accent-secondary)'
+              if (v >= ELITE_MIN) tierColor = 'var(--accent-secondary)'
               else if (v >= 31) tierColor = '#FFD700'
               return (
                 <div key={key} className="stat-item">
