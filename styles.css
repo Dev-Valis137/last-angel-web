@@ -93,7 +93,7 @@ nav {
 #theme-toggle-target {
   display: flex;
   align-items: center;
-  margin-right: 0.75rem;
+  margin-left: 0.75rem;
 }
 .theme-toggle-btn {
   background: none;
@@ -339,10 +339,6 @@ html.light {
 }
 
 /* === THEME TOGGLE === */
-#theme-toggle-target {
-  display: flex;
-  align-items: center;
-}
 .theme-toggle-btn {
   background: none;
   border: 1px solid var(--border);
