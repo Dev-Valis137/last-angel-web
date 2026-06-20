@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
 const INITIAL_POINTS = 130
-const MAX_ATTR = 75
-const ELITE_MIN = 41
-const ELITE_MAX = 50
-const SUPERHUMAN_MIN = 51
+const MAX_ATTR = 100
+const COMPETENTE_MAX = 50
+const ELITE_MIN = 51
+const ELITE_MAX = 75
+const SUPERHUMAN_MIN = 76
 const ATTR_NAMES = {
   fisico: 'Físico', agilidad: 'Agilidad', intelecto: 'Intelecto',
   carisma: 'Carisma', percepcion: 'Percepción', intuicion: 'Intuición', temple: 'Temple',
@@ -20,16 +21,16 @@ export default function CharacterForm() {
 
   const countSuperhuman = vals.filter(v => v >= SUPERHUMAN_MIN).length
   const countElite = vals.filter(v => v >= ELITE_MIN && v <= ELITE_MAX).length
-  const countAbove40 = vals.filter(v => v > 40).length
+  const countAbove50 = vals.filter(v => v > COMPETENTE_MAX).length
   const hasElite = vals.some(v => v >= ELITE_MIN && v <= ELITE_MAX)
 
   const warnings = []
-  if (countSuperhuman > 1) warnings.push('Solo puede haber 1 atributo sobrehumano (51-75)')
-  if (countElite > 2) warnings.push('Solo puede haber hasta 2 atributos Élite (41-50)')
-  if (countAbove40 > 0 && !hasElite) warnings.push('Debes tener al menos 1 atributo Élite (41-50)')
-  if (countAbove40 > 0) {
-    const nonEliteSuper = vals.filter(v => v > 40 && v < ELITE_MIN || v > ELITE_MAX)
-    if (nonEliteSuper.length > 0) warnings.push('Los atributos que no sean Élite ni Sobrehumano no pueden superar 40')
+  if (countSuperhuman > 1) warnings.push('Solo puede haber 1 atributo Sobrehumano (76-99)')
+  if (countElite > 2) warnings.push('Solo puede haber hasta 2 atributos Élite (51-75)')
+  if (countAbove50 > 0 && !hasElite) warnings.push('Debes tener al menos 1 atributo Élite (51-75)')
+  if (countAbove50 > 0) {
+    const bad = vals.filter(v => v > COMPETENTE_MAX && (v < ELITE_MIN || v > ELITE_MAX) && v < SUPERHUMAN_MIN)
+    if (bad.length > 0) warnings.push('Los atributos que no sean Élite ni Sobrehumano no pueden superar 50')
   }
   if (remaining < 0) warnings.push(`Te pasaste por ${-remaining} puntos (gastaste ${spent} de ${INITIAL_POINTS})`)
 
@@ -139,9 +140,9 @@ export default function CharacterForm() {
             {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste por {-remaining}!</span>}
           </p>
           <div style={{ fontSize: '0.82rem', marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <span style={{ color: 'var(--accent)' }}>◉ Sobrehumano (51-75)</span>
-            <span style={{ color: 'var(--accent-secondary)' }}>◉ Élite (41-50)</span>
-            <span style={{ color: 'var(--text-secondary)' }}>◉ Normal (1-40)</span>
+            <span style={{ color: 'var(--accent)' }}>◉ Sobrehumano (76-99)</span>
+            <span style={{ color: 'var(--accent-secondary)' }}>◉ Élite (51-75)</span>
+            <span style={{ color: 'var(--text-secondary)' }}>◉ Competente (1-50)</span>
           </div>
           {warnings.length > 0 && (
             <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ff4444', borderRadius: 'var(--radius)', background: 'rgba(255,68,68,0.05)' }}>
@@ -159,6 +160,7 @@ export default function CharacterForm() {
               let tierColor = 'var(--text-secondary)'
               if (v >= SUPERHUMAN_MIN) tierColor = 'var(--accent)'
               else if (v >= ELITE_MIN) tierColor = 'var(--accent-secondary)'
+              else if (v >= 31) tierColor = '#FFD700'
               return (
                 <div key={key} className="stat-item">
                   <div className="stat-label"><span>{label}</span><span style={{ fontFamily: 'var(--font-mono)', color: tierColor }}>{v}</span></div>
