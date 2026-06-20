@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const INITIAL_POINTS = 150
+const INITIAL_POINTS = 130
 const MAX_INITIAL = 50
 const ATTR_NAMES = {
   fisico: 'Físico', agilidad: 'Agilidad', intelecto: 'Intelecto',
@@ -110,6 +110,9 @@ export default function CharacterForm() {
             Usados: <strong style={{ color: remaining < 0 ? '#ff4444' : 'var(--accent)' }}>{total}</strong> / {INITIAL_POINTS}
             {remaining >= 0 && <span> — Restantes: <strong style={{ color: 'var(--accent-secondary)' }}>{remaining}</strong></span>}
             {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste!</span>}
+          </p>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}>
+            <strong>Reglas de distribución:</strong> Máx. 1 Sobrehumano (51–75) · Máx. 2 Élite (41–50) · Mín. 1 Élite · El resto ≤ 40
           </p>
           <div className="stat-grid">
             {Object.entries(ATTR_NAMES).map(([key, label]) => (
