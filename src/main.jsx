@@ -1,12 +1,12 @@
 import ReactDOM from 'react-dom/client'
 import GravityStarsBackground from './GravityStarsBackground.jsx'
 import ThemeTogglerButton from './ThemeTogglerButton.jsx'
-import CustomCursor from './CustomCursor.jsx'
+import { SmoothCursor } from './components/ui/smooth-cursor.jsx'
 
 ReactDOM.createRoot(document.getElementById('react-root')).render(
   <>
     <GravityStarsBackground />
-    <CustomCursor />
+    <SmoothCursor />
   </>
 )
 
