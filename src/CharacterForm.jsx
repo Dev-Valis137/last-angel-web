@@ -43,8 +43,6 @@ export default function CharacterForm() {
   if (success) {
     return (
       <section id="web" style={{ marginTop: '2rem' }}>
-        <h2>Web de Fichas</h2>
-        <p class="section-subtitle">Plataforma para gestión de personajes.</p>
         <div class="card" style={{ textAlign: 'center', padding: '3rem' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
           <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>¡Ficha enviada!</h3>
@@ -56,9 +54,6 @@ export default function CharacterForm() {
 
   return (
     <section id="web" style={{ marginTop: '2rem' }}>
-      <h2>Web de Fichas</h2>
-      <p className="section-subtitle">Completa el formulario para solicitar tu ficha de personaje.</p>
-
       {error && (
         <div className="card" style={{ borderColor: '#ff4444', textAlign: 'center', padding: '1rem', marginBottom: '1rem' }}>
           <p style={{ color: '#ff4444' }}>Error al enviar. Intenta de nuevo o contacta al staff.</p>
