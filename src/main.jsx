@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import GravityStarsBackground from './GravityStarsBackground.jsx'
 import ThemeTogglerButton from './ThemeTogglerButton.jsx'
 import { SmoothCursor } from './components/ui/smooth-cursor.jsx'
+import CharacterForm from './CharacterForm.jsx'
 
 const CursorDot = () => (
   <svg width="16" height="16" viewBox="0 0 16 16">
@@ -25,6 +26,11 @@ ReactDOM.createRoot(document.getElementById('react-root')).render(
 const cursorRoot = document.getElementById('cursor-root')
 if (cursorRoot) {
   ReactDOM.createRoot(cursorRoot).render(<SmoothCursor cursor={<CursorDot />} />)
+}
+
+const formRoot = document.getElementById('character-form-root')
+if (formRoot) {
+  ReactDOM.createRoot(formRoot).render(<CharacterForm />)
 }
 
 const toggleTarget = document.getElementById('theme-toggle-target')
