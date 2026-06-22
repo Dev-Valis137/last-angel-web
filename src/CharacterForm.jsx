@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 
 const INITIAL_POINTS = 130
 const MAX_ATTR = 75
@@ -117,20 +118,16 @@ export default function CharacterForm() {
 
   if (success) {
     return (
-      <section id="web" style={{ marginTop: '2rem' }}>
-        <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-          <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>¡Ficha enviada!</h3>
-          <p style={{ color: 'var(--text-secondary)' }}>Un miembro del staff revisará tu solicitud. Pronto recibirás respuesta.</p>
-        </div>
-      </section>
+      <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
+        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
+        <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>¡Ficha enviada!</h3>
+        <p style={{ color: 'var(--text-secondary)' }}>Un miembro del staff revisará tu solicitud. Pronto recibirás respuesta.</p>
+      </div>
     )
   }
 
-  const s = (n) => step === n ? 'block' : 'none'
-
   return (
-    <section id="web" style={{ marginTop: '2rem' }}>
+    <>
       {error && (
         <div className="card" style={{ borderColor: '#ff4444', textAlign: 'center', padding: '1rem', marginBottom: '1rem' }}>
           <p style={{ color: '#ff4444' }}>Error al enviar. Intenta de nuevo o contacta al staff.</p>
@@ -178,149 +175,162 @@ export default function CharacterForm() {
       <form name="character-sheet" method="POST" data-netlify="true" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         <input type="hidden" name="form-name" value="character-sheet" />
 
-        {/* I. DATOS BÁSICOS */}
-        <div className="card" style={{ display: s(1) }}>
-          <h3>📌 I. Datos Básicos</h3>
-          <div className="form-grid">
-            <label>Nombre completo<input type="text" name="nombre" required /></label>
-            <label>Apodo/Alias<input type="text" name="alias" /></label>
-            <label>Edad<input type="number" name="edad" required min={14} max={120} /></label>
-            <label>Género<input type="text" name="genero" /></label>
-            <label>Lugar de origen<select name="origen" required><option value="">Seleccionar</option><option>Arkham</option><option>Forastero</option></select></label>
-            <label>Facción<select name="faccion"><option value="">Ninguna</option><option>Sindicato Kestrel</option><option>Hijos del Pantano</option><option>El Eco</option><option>Hermandad del Silencio</option><option>Policía</option><option>Fiscalía</option><option>Defensoría</option><option>Prensa</option><option>Civil</option></select></label>
-            <label>Rango en la facción<input type="text" name="rango" /></label>
-            <label>Estado<select name="estado" required><option value="">Seleccionar</option><option>Vivo</option><option>Herido</option><option>Encarcelado</option><option>Prófugo</option><option>Otro</option></select></label>
-          </div>
-        </div>
-
-        {/* II. ASPECTO */}
-        <div className="card" style={{ display: s(2) }}>
-          <h3>👤 II. Aspecto Físico y Estilo</h3>
-          <label>Descripción física<textarea name="descripcion" rows={4} required placeholder="Mínimo 3 líneas" /></label>
-          <label>Estilo de vestir<textarea name="vestir" rows={2} placeholder="¿Cómo te vistes para trabajar, robar o ir a una gala?" /></label>
-        </div>
-
-        {/* III. PSICOLOGÍA */}
-        <div className="card" style={{ display: s(3) }}>
-          <h3>🧠 III. Psicología</h3>
-          <label>Personalidad<textarea name="personalidad" rows={4} required placeholder="Mínimo 3 líneas" /></label>
-          <div className="form-grid">
-            <label>Virtudes (mín. 2)<textarea name="virtudes" rows={2} required /></label>
-            <label>Defectos (mín. 2)<textarea name="defectos" rows={2} required /></label>
-          </div>
-          <label>Miedos/Fobias<textarea name="miedos" rows={2} /></label>
-        </div>
-
-        {/* IV. HISTORIA */}
-        <div className="card" style={{ display: s(4) }}>
-          <h3>📖 IV. Historia y Motivaciones</h3>
-          <label>Trasfondo<textarea name="trasfondo" rows={6} required placeholder="¿De dónde vienes? ¿Cómo llegaste a Arkham? Mínimo 5 líneas" /></label>
-          <label>Motivación actual<textarea name="motivacion" rows={2} required placeholder="Dinero, venganza, poder, sobrevivir, justicia…" /></label>
-        </div>
-
-        {/* V. ATRIBUTOS */}
-        <div className="card" style={{ display: s(5) }}>
-          <h3>🧬 V. Atributos (11–{MAX_ATTR})</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-            Reparte <strong style={{ color: 'var(--accent)' }}>{INITIAL_POINTS} puntos</strong> entre los 7 atributos.
-            Gastados (sobre base 11): <strong style={{ color: remaining < 0 ? '#ff4444' : 'var(--accent)' }}>{spent}</strong> / {INITIAL_POINTS}
-            {remaining >= 0 && <span> — Restantes: <strong style={{ color: 'var(--accent-secondary)' }}>{remaining}</strong></span>}
-            {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste por {-remaining}!</span>}
-          </p>
-          <div style={{ fontSize: '0.82rem', marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <span style={{ color: 'var(--accent-secondary)' }}>◉ Élite (51-75)</span>
-            <span style={{ color: '#FFD700' }}>◉ Competente (31-50)</span>
-            <span style={{ color: 'var(--text-secondary)' }}>◉ Promedio (11-30)</span>
-          </div>
-          {warnings.length > 0 && (
-            <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ff4444', borderRadius: 'var(--radius)', background: 'rgba(255,68,68,0.05)' }}>
-              {warnings.map((w, i) => <p key={i} style={{ color: '#ff4444', fontSize: '0.82rem' }}>⚠ {w}</p>)}
-            </div>
+        <AnimatePresence mode="wait">
+          {step === 1 && (
+            <motion.div key="step1" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>📌 I. Datos Básicos</h3>
+              <div className="form-grid">
+                <label>Nombre completo<input type="text" name="nombre" required /></label>
+                <label>Apodo/Alias<input type="text" name="alias" /></label>
+                <label>Edad<input type="number" name="edad" required min={14} max={120} /></label>
+                <label>Género<input type="text" name="genero" /></label>
+                <label>Lugar de origen<select name="origen" required><option value="">Seleccionar</option><option>Arkham</option><option>Forastero</option></select></label>
+                <label>Facción<select name="faccion"><option value="">Ninguna</option><option>Sindicato Kestrel</option><option>Hijos del Pantano</option><option>El Eco</option><option>Hermandad del Silencio</option><option>Policía</option><option>Fiscalía</option><option>Defensoría</option><option>Prensa</option><option>Civil</option></select></label>
+                <label>Rango en la facción<input type="text" name="rango" /></label>
+                <label>Estado<select name="estado" required><option value="">Seleccionar</option><option>Vivo</option><option>Herido</option><option>Encarcelado</option><option>Prófugo</option><option>Otro</option></select></label>
+              </div>
+            </motion.div>
           )}
-          {submitWarnings.length > 0 && (
-            <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ff4444', borderRadius: 'var(--radius)', background: 'rgba(255,68,68,0.05)' }}>
-              {submitWarnings.map((w, i) => <p key={i} style={{ color: '#ff4444', fontSize: '0.82rem' }}>⚠ {w}</p>)}
-            </div>
+
+          {step === 2 && (
+            <motion.div key="step2" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>👤 II. Aspecto Físico y Estilo</h3>
+              <label>Descripción física<textarea name="descripcion" rows={4} required placeholder="Mínimo 3 líneas" /></label>
+              <label>Estilo de vestir<textarea name="vestir" rows={2} placeholder="¿Cómo te vistes para trabajar, robar o ir a una gala?" /></label>
+            </motion.div>
           )}
-          <div className="stat-grid">
-            {Object.entries(ATTR_NAMES).map(([key, label]) => {
-              const v = attrs[key]
-              let tierColor = 'var(--text-secondary)'
-              if (v >= ELITE_MIN) tierColor = 'var(--accent-secondary)'
-              else if (v >= 31) tierColor = '#FFD700'
-              return (
-                <div key={key} className="stat-item">
-                  <div className="stat-label"><span>{label}</span><span style={{ fontFamily: 'var(--font-mono)', color: tierColor }}>{v}</span></div>
-                  <input type="range" min={MIN_ATTR} max={MAX_ATTR} value={v} onChange={e => updateAttr(key, e.target.value)} style={{ width: '100%', accentColor: tierColor }} />
-                  <input type="hidden" name={`attr_${key}`} value={v} />
+
+          {step === 3 && (
+            <motion.div key="step3" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>🧠 III. Psicología</h3>
+              <label>Personalidad<textarea name="personalidad" rows={4} required placeholder="Mínimo 3 líneas" /></label>
+              <div className="form-grid">
+                <label>Virtudes (mín. 2)<textarea name="virtudes" rows={2} required /></label>
+                <label>Defectos (mín. 2)<textarea name="defectos" rows={2} required /></label>
+              </div>
+              <label>Miedos/Fobias<textarea name="miedos" rows={2} /></label>
+            </motion.div>
+          )}
+
+          {step === 4 && (
+            <motion.div key="step4" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>📖 IV. Historia y Motivaciones</h3>
+              <label>Trasfondo<textarea name="trasfondo" rows={6} required placeholder="¿De dónde vienes? ¿Cómo llegaste a Arkham? Mínimo 5 líneas" /></label>
+              <label>Motivación actual<textarea name="motivacion" rows={2} required placeholder="Dinero, venganza, poder, sobrevivir, justicia…" /></label>
+            </motion.div>
+          )}
+
+          {step === 5 && (
+            <motion.div key="step5" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>🧬 V. Atributos (11–{MAX_ATTR})</h3>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                Reparte <strong style={{ color: 'var(--accent)' }}>{INITIAL_POINTS} puntos</strong> entre los 7 atributos.
+                Gastados (sobre base 11): <strong style={{ color: remaining < 0 ? '#ff4444' : 'var(--accent)' }}>{spent}</strong> / {INITIAL_POINTS}
+                {remaining >= 0 && <span> — Restantes: <strong style={{ color: 'var(--accent-secondary)' }}>{remaining}</strong></span>}
+                {remaining < 0 && <span style={{ color: '#ff4444' }}> — ¡Te pasaste por {-remaining}!</span>}
+              </p>
+              <div style={{ fontSize: '0.82rem', marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <span style={{ color: 'var(--accent-secondary)' }}>◉ Élite (51-75)</span>
+                <span style={{ color: '#FFD700' }}>◉ Competente (31-50)</span>
+                <span style={{ color: 'var(--text-secondary)' }}>◉ Promedio (11-30)</span>
+              </div>
+              {warnings.length > 0 && (
+                <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ff4444', borderRadius: 'var(--radius)', background: 'rgba(255,68,68,0.05)' }}>
+                  {warnings.map((w, i) => <p key={i} style={{ color: '#ff4444', fontSize: '0.82rem' }}>⚠ {w}</p>)}
                 </div>
-              )
-            })}
-          </div>
-        </div>
+              )}
+              {submitWarnings.length > 0 && (
+                <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ff4444', borderRadius: 'var(--radius)', background: 'rgba(255,68,68,0.05)' }}>
+                  {submitWarnings.map((w, i) => <p key={i} style={{ color: '#ff4444', fontSize: '0.82rem' }}>⚠ {w}</p>)}
+                </div>
+              )}
+              <div className="stat-grid">
+                {Object.entries(ATTR_NAMES).map(([key, label]) => {
+                  const v = attrs[key]
+                  let tierColor = 'var(--text-secondary)'
+                  if (v >= ELITE_MIN) tierColor = 'var(--accent-secondary)'
+                  else if (v >= 31) tierColor = '#FFD700'
+                  return (
+                    <div key={key} className="stat-item">
+                      <div className="stat-label"><span>{label}</span><span style={{ fontFamily: 'var(--font-mono)', color: tierColor }}>{v}</span></div>
+                      <input type="range" min={MIN_ATTR} max={MAX_ATTR} value={v} onChange={e => updateAttr(key, e.target.value)} style={{ width: '100%', accentColor: tierColor }} />
+                      <input type="hidden" name={`attr_${key}`} value={v} />
+                    </div>
+                  )
+                })}
+              </div>
+            </motion.div>
+          )}
 
-        {/* VI. PERKS */}
-        <div className="card" style={{ display: s(6) }}>
-          <h3>🛠️ VI. Perks <span className="sub">(máx. 2)</span></h3>
-          {[1, 2].map(i => (
-            <div key={i} style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}>
-              <h4 style={{ color: 'var(--accent)', marginBottom: '0.5rem' }}>Perk {i}</h4>
-              <label>Nombre<input type="text" name={`perk_${i}_nombre`} /></label>
-              <label>Rama<select name={`perk_${i}_rama`}><option value="">Seleccionar</option><option>Mental</option><option>Social</option><option>Física</option><option>Instinto</option></select></label>
-              <label>Efecto<textarea name={`perk_${i}_efecto`} rows={2} /></label>
-            </div>
-          ))}
-        </div>
+          {step === 6 && (
+            <motion.div key="step6" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>🛠️ VI. Perks <span className="sub">(máx. 2)</span></h3>
+              {[1, 2].map(i => (
+                <div key={i} style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}>
+                  <h4 style={{ color: 'var(--accent)', marginBottom: '0.5rem' }}>Perk {i}</h4>
+                  <label>Nombre<input type="text" name={`perk_${i}_nombre`} /></label>
+                  <label>Rama<select name={`perk_${i}_rama`}><option value="">Seleccionar</option><option>Mental</option><option>Social</option><option>Física</option><option>Instinto</option></select></label>
+                  <label>Efecto<textarea name={`perk_${i}_efecto`} rows={2} /></label>
+                </div>
+              ))}
+            </motion.div>
+          )}
 
-        {/* VII. PROGRESIÓN */}
-        <div className="card" style={{ display: s(7) }}>
-          <h3>📈 VII. Progresión</h3>
-          <div className="form-grid">
-            <label>PD actuales<input type="number" name="pd_actuales" min={0} /></label>
-            <label>PD totales ganados<input type="number" name="pd_totales" min={0} /></label>
-          </div>
-          <label>Historial de mejoras<textarea name="historial" rows={3} placeholder="Atributos subidos y perks comprados con fechas" /></label>
-        </div>
+          {step === 7 && (
+            <motion.div key="step7" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>📈 VII. Progresión</h3>
+              <div className="form-grid">
+                <label>PD actuales<input type="number" name="pd_actuales" min={0} /></label>
+                <label>PD totales ganados<input type="number" name="pd_totales" min={0} /></label>
+              </div>
+              <label>Historial de mejoras<textarea name="historial" rows={3} placeholder="Atributos subidos y perks comprados con fechas" /></label>
+            </motion.div>
+          )}
 
-        {/* VIII. PV */}
-        <div className="card" style={{ display: s(8) }}>
-          <h3>❤️ VIII. Puntos de Vida</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-            PV máximos: <strong style={{ color: 'var(--accent)' }}>50 + ({attrs.fisico} × 2) = {50 + attrs.fisico * 2}</strong>
-          </p>
-          <div className="form-grid">
-            <label>PV actuales<input type="number" name="pv_actuales" min={0} /></label>
-            <label>Heridas / Estado<textarea name="heridas" rows={1} placeholder="Heridas leves, graves, inconsciencia…" /></label>
-          </div>
-          <input type="hidden" name="pv_maximos" value={50 + attrs.fisico * 2} />
-        </div>
+          {step === 8 && (
+            <motion.div key="step8" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>❤️ VIII. Puntos de Vida</h3>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                PV máximos: <strong style={{ color: 'var(--accent)' }}>50 + ({attrs.fisico} × 2) = {50 + attrs.fisico * 2}</strong>
+              </p>
+              <div className="form-grid">
+                <label>PV actuales<input type="number" name="pv_actuales" min={0} /></label>
+                <label>Heridas / Estado<textarea name="heridas" rows={1} placeholder="Heridas leves, graves, inconsciencia…" /></label>
+              </div>
+              <input type="hidden" name="pv_maximos" value={50 + attrs.fisico * 2} />
+            </motion.div>
+          )}
 
-        {/* IX. ECONOMÍA */}
-        <div className="card" style={{ display: s(9) }}>
-          <h3>💰 IX. Economía y Recursos</h3>
-          <div className="form-grid">
-            <label>Créditos actuales<input type="number" name="creditos" min={0} /></label>
-            <label>Deudas<textarea name="deudas" rows={1} placeholder="¿Con quién y cuánto?" /></label>
-          </div>
-        </div>
+          {step === 9 && (
+            <motion.div key="step9" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>💰 IX. Economía y Recursos</h3>
+              <div className="form-grid">
+                <label>Créditos actuales<input type="number" name="creditos" min={0} /></label>
+                <label>Deudas<textarea name="deudas" rows={1} placeholder="¿Con quién y cuánto?" /></label>
+              </div>
+            </motion.div>
+          )}
 
-        {/* X. INVENTARIO */}
-        <div className="card" style={{ display: s(10) }}>
-          <h3>🎒 X. Inventario</h3>
-          <div className="form-grid">
-            <label>Arma principal<input type="text" name="arma_principal" /></label>
-            <label>Arma secundaria / Defensa<input type="text" name="arma_secundaria" /></label>
-            <label>Objetos clave / Gadgets<textarea name="objetos" rows={2} /></label>
-            <label>Vehículo<input type="text" name="vehiculo" /></label>
-            <label>Vivienda<input type="text" name="vivienda" placeholder="Ubicación y tipo" /></label>
-          </div>
-        </div>
+          {step === 10 && (
+            <motion.div key="step10" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>🎒 X. Inventario</h3>
+              <div className="form-grid">
+                <label>Arma principal<input type="text" name="arma_principal" /></label>
+                <label>Arma secundaria / Defensa<input type="text" name="arma_secundaria" /></label>
+                <label>Objetos clave / Gadgets<textarea name="objetos" rows={2} /></label>
+                <label>Vehículo<input type="text" name="vehiculo" /></label>
+                <label>Vivienda<input type="text" name="vivienda" placeholder="Ubicación y tipo" /></label>
+              </div>
+            </motion.div>
+          )}
 
-        {/* XI. NOTAS */}
-        <div className="card" style={{ display: s(11) }}>
-          <h3>📝 XI. Notas Adicionales</h3>
-          <textarea name="notas" rows={4} placeholder="Contactos, secretos, enemigos, etc." />
-        </div>
+          {step === 11 && (
+            <motion.div key="step11" className="card" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25, ease: [0.2, 0.9, 0.4, 1] }}>
+              <h3>📝 XI. Notas Adicionales</h3>
+              <textarea name="notas" rows={4} placeholder="Contactos, secretos, enemigos, etc." />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Navigation */}
         <div style={{
@@ -352,11 +362,11 @@ export default function CharacterForm() {
             </button>
           ) : (
             <button type="submit" className="btn-submit" style={{ margin: 0 }} disabled={loading}>
-              {loading ? 'Enviando...' : 'Enviar Ficha'}
+              {loading ? <><span className="spinner"></span>Enviando...</> : 'Enviar Ficha'}
             </button>
           )}
         </div>
       </form>
-    </section>
+    </>
   )
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 
 function getStoredTheme() {
-  const stored = localStorage.getItem('theme')
+  const stored = localStorage.getItem('valis-theme')
   if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
   return 'system'
 }
@@ -21,7 +21,7 @@ export default function useTheme() {
 
   useEffect(() => {
     applyTheme(theme)
-    localStorage.setItem('theme', theme)
+    localStorage.setItem('valis-theme', theme)
   }, [theme])
 
   useEffect(() => {

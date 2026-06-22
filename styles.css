@@ -55,6 +55,7 @@ body {
   color: var(--text);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -93,7 +94,7 @@ nav {
 }
 .nav-links a:hover::after { width: 100%; }
 .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; background: none; border: none; padding: 4px; }
-.hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease; }
 #nav-toggle { display: none; }
 #theme-toggle-target {
   display: flex;
@@ -133,6 +134,24 @@ nav {
 @keyframes glow-pulse {
   0%, 100% { box-shadow: 0 8px 32px rgba(0,255,255,0.08), 0 0 0 rgba(0,255,255,0); }
   50% { box-shadow: 0 8px 32px rgba(0,255,255,0.12), 0 0 20px rgba(0,255,255,0.06); }
+}
+
+/* Hero entrance */
+.hero {
+  animation: heroFadeIn 1s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
+}
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animated hero gradient */
+.hero::before {
+  animation: heroGradient 8s ease-in-out infinite alternate;
+}
+@keyframes heroGradient {
+  0% { background-position: 0% 30%; }
+  100% { background-position: 100% 70%; }
 }
 
 /* === SECTIONS === */
@@ -209,6 +228,38 @@ tbody td {
 }
 tbody tr:hover td { background: rgba(0,255,255,0.02); }
 tbody td:first-child { color: var(--text); font-weight: 500; }
+
+/* === STAGGER REVEAL === */
+.grid-2 > .reveal:nth-child(1),
+.grid-3 > .reveal:nth-child(1),
+.grid-4 > .reveal:nth-child(1),
+.steps > .reveal:nth-child(1),
+.scale-list > .reveal:nth-child(1) { transition-delay: 0s; }
+.grid-2 > .reveal:nth-child(2),
+.grid-3 > .reveal:nth-child(2),
+.grid-4 > .reveal:nth-child(2),
+.steps > .reveal:nth-child(2),
+.scale-list > .reveal:nth-child(2) { transition-delay: 0.08s; }
+.grid-2 > .reveal:nth-child(3),
+.grid-3 > .reveal:nth-child(3),
+.grid-4 > .reveal:nth-child(3),
+.steps > .reveal:nth-child(3),
+.scale-list > .reveal:nth-child(3) { transition-delay: 0.16s; }
+.grid-2 > .reveal:nth-child(4),
+.grid-3 > .reveal:nth-child(4),
+.grid-4 > .reveal:nth-child(4),
+.steps > .reveal:nth-child(4),
+.scale-list > .reveal:nth-child(4) { transition-delay: 0.24s; }
+.grid-2 > .reveal:nth-child(5),
+.grid-3 > .reveal:nth-child(5),
+.grid-4 > .reveal:nth-child(5),
+.steps > .reveal:nth-child(5),
+.scale-list > .reveal:nth-child(5) { transition-delay: 0.32s; }
+.grid-2 > .reveal:nth-child(6),
+.grid-3 > .reveal:nth-child(6),
+.grid-4 > .reveal:nth-child(6),
+.steps > .reveal:nth-child(6),
+.scale-list > .reveal:nth-child(6) { transition-delay: 0.4s; }
 
 /* === STAT BARS (atributos) === */
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; }
@@ -354,6 +405,15 @@ footer {
   #nav-toggle:checked ~ .nav-links {
     transform: translateY(0); opacity: 1; pointer-events: all;
   }
+  #nav-toggle:checked ~ .hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  #nav-toggle:checked ~ .hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+  #nav-toggle:checked ~ .hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
   section { padding: 3rem 1.25rem; }
   nav { padding: 0 1.25rem; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
@@ -439,6 +499,12 @@ footer {
   transform: scale(1.03);
   box-shadow: 0 0 24px rgba(0, 255, 255, 0.3);
 }
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
 /* === LORE === */
 .faction-block {
@@ -463,4 +529,69 @@ footer {
   color: var(--text-secondary);
   font-size: 0.9rem;
   line-height: 1.65;
+}
+
+/* === STAT BAR ANIMATION === */
+.stat-bar-fill {
+  transition: width 0.8s cubic-bezier(0.2, 0.9, 0.4, 1) !important;
+}
+
+/* === TABLE ROW HOVER GLOW === */
+tbody tr {
+  transition: background 0.2s ease;
+}
+tbody tr:hover td {
+  background: rgba(0, 255, 255, 0.04);
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.1);
+}
+
+
+
+/* === NAV SCROLL EFFECT === */
+nav {
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+}
+nav.scrolled {
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 var(--accent);
+}
+html.light nav.scrolled {
+  background: rgba(245, 245, 247, 0.95);
+}
+
+/* === FORM STEP SLIDE === */
+.form-step-enter {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.form-step-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.form-step-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.form-step-exit-active {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* === LOADING SPINNER === */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
